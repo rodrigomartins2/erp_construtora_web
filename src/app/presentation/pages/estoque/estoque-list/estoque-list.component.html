@@ -1,0 +1,106 @@
+<div class="page-card">
+  <div class="page-card-header">
+    <button type="button" class="page-card-title" (click)="filtroAberto = !filtroAberto">
+      <i class="fas fa-filter text-surface-400"></i> Filtro
+      <i class="fas fa-chevron-down text-xs text-surface-400 transition-transform" [class.rotate-180]="filtroAberto"></i>
+    </button>
+    <a routerLink="estoquecadastro/" class="text-sm text-surface-600 hover:text-primary">
+      <i class="fas fa-pen-square"></i> Novo Registro
+    </a>
+  </div>
+
+  @if (filtroAberto) {
+    <form [formGroup]="myform" (ngSubmit)="reloadTable()" class="mb-4 flex flex-wrap items-end gap-3">
+      <div class="field w-full sm:w-72">
+        <p-select formControlName="estoqueID" placeholder="Selecione o Estoque" [options]="listEstoque" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+      </div>
+      <div class="field w-full sm:w-72">
+        <p-select formControlName="produtoDescricaoID" placeholder="Selecione o Produto" [options]="listProduto" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+      </div>
+      <div class="field w-full sm:w-52">
+        <p-select formControlName="situacao" placeholder="Selecione a Situação" [options]="listaSituacao" optionValue="codigo" optionLabel="descricao" [showClear]="true" appendTo="body" />
+      </div>
+      <p-button type="submit" label="Buscar" icon="fas fa-search" [outlined]="true" />
+      <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+    </form>
+  }
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="estoqueProdutoID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.estoqueProdutoID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nomeEstoque">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estoque</th>
+        <td mat-cell *matCellDef="let row">{{ row.nomeEstoque }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="marcaDescricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Marca</th>
+        <td mat-cell *matCellDef="let row">{{ row.marcaDescricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="produtoDescricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Produto</th>
+        <td mat-cell *matCellDef="let row">{{ row.produtoDescricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="subProduto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição Produto</th>
+        <td mat-cell *matCellDef="let row" [title]="row.subProduto">{{ row.subProduto | ellipsis: 25 }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="unidadeMedidaDescricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Un</th>
+        <td mat-cell *matCellDef="let row">{{ row.unidadeMedidaDescricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="qtdeMinima">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Qtde. Mín.</th>
+        <td mat-cell *matCellDef="let row">{{ row.qtdeMinima != null ? row.qtdeMinima : 0 }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="saldo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Saldo</th>
+        <td mat-cell *matCellDef="let row">{{ row.saldo != null ? row.saldo : 0 }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataUltimaCompra">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Dt. Últ. Compra</th>
+        <td mat-cell *matCellDef="let row">{{ row.dataUltimaCompra != null ? (row.dataUltimaCompra | date: 'dd/MM/yyyy') : '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a [routerLink]="['estoquecadastro/editar', row.estoqueProdutoID, 2]" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a (click)="onExcluir(row)" class="table-action table-action-danger" [pTooltip]="row.status == 'Ativo' ? 'Inativar' : 'Ativar'" tooltipPosition="top">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

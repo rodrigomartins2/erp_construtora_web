@@ -1,0 +1,23 @@
+@if (isOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" (click)="closeModal()">
+    <div class="app-modal-panel w-full max-w-lg" (click)="preventModalClose($event)">
+      <!-- Cabeçalho: conteúdo opcional -->
+      <div class="modal-header">
+        <ng-content select="[modal-header]"></ng-content>
+        <button type="button" class="table-action ml-auto" aria-label="Fechar" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Corpo -->
+      <div class="modal-body">
+        <ng-content select="[modal-body]"></ng-content>
+      </div>
+
+      <!-- Rodapé: conteúdo opcional -->
+      <div class="modal-footer">
+        <ng-content select="[modal-footer]"></ng-content>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,149 @@
+<p-table
+  [value]="sortedData"
+  [paginator]="paginator"
+  [alwaysShowPaginator]="alwaysShowPaginator"
+  [rows]="rows"
+  [first]="first"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [loading]="loading"
+  [showLoader]="false"
+  [showLoader]="false"
+  [totalRecords]="totalRecords"
+  [lazy]="lazy"
+  [tableStyle]="{ 'min-width': minWidth }"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
+  sortMode="single"
+  styleClass="generics-table"
+  currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} itens"
+  [showCurrentPageReport]="showCurrentPageReport"
+  paginatorDropdownAppendTo="body"
+  [scrollable]="true"
+  (onSort)="sortChange.emit($event)"
+  (onPage)="pageChange.emit($event)"
+>
+  <ng-template #header>
+    <tr>
+      @for (column of columns; track trackByColumn($index, column)) {
+        <th
+          class="px-4 py-2 text-xs font-semibold uppercase text-[#102348] bg-white"
+          [ngClass]="[getAlignClass(column.align), column.styleClass || '']"
+          [ngStyle]="{ width: column.width || null }"
+          [pSortableColumn]="isSortable(column) ? column.field : undefined"
+        >
+          <span class="inline-flex items-center gap-2" [ngClass]="getJustifyClass(column.align)">
+            {{ column.header }}
+            @if (isSortable(column)) {
+              <p-sortIcon [field]="column.field" />
+            }
+          </span>
+        </th>
+      }
+
+      @if (hasActions) {
+        <th
+          alignFrozen="right"
+          class="generics-table-actions-column w-28 px-4 py-2 text-center text-xs font-semibold uppercase text-[#102348]"
+          pFrozenColumn
+          [frozen]="true"
+        >
+          Ações
+        </th>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-row>
+    <tr class="transition-colors hover:bg-slate-50">
+      @for (column of columns; track trackByColumn($index, column)) {
+        <td
+          class="px-4 py-2 text-sm text-[#566166]"
+          [ngClass]="[getAlignClass(column.align), column.styleClass || '']"
+        >
+          @if (column.template) {
+            <ng-container
+              *ngTemplateOutlet="column.template; context: { $implicit: row, field: column.field }"
+            />
+          } @else if (column.type === 'badge') {
+            <span
+              class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
+              [ngClass]="[column.badgeStyleClass || '', getBadgeClass(row, column)]"
+            >
+              {{ getDisplayValue(row, column) }}
+            </span>
+          } @else {
+            <span [class.font-medium]="column.type !== 'date'">
+              {{ getDisplayValue(row, column) }}
+            </span>
+          }
+        </td>
+      }
+
+      @if (hasActions) {
+        <td
+          alignFrozen="right"
+          class="generics-table-actions-column px-4 py-2 align-middle"
+          pFrozenColumn
+          [frozen]="true"
+        >
+          <div class="flex items-center justify-center gap-1">
+            @let visibleActions = getVisibleActions(row);
+            @for (action of visibleActions; track trackByIndex($index)) {
+              <p-button
+                [icon]="action.icon"
+                [label]="action.label"
+                [outlined]="action.outlined ?? true"
+                [rounded]="true"
+                [severity]="action.severity || 'secondary'"
+                [disabled]="isActionDisabled(action, row)"
+                [styleClass]="getActionButtonClass(action)"
+                [ariaLabel]="action.ariaLabel || action.tooltip || action.label || 'Ação'"
+                [pTooltip]="getActionTooltip(action)"
+                [tooltipPosition]="getActionTooltipPosition($index, visibleActions.length)"
+                (onClick)="runAction($event, action, row)"
+              />
+            }
+          </div>
+        </td>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td
+        class="px-4 py-6 text-center text-sm text-slate-500"
+        [attr.colspan]="columns.length + (hasActions ? 1 : 0)"
+      >
+        {{ emptyMessage }}
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #loadingbody>
+    @for (_ of [].constructor(rows); track $index) {
+      <tr>
+        @for (column of columns; track trackByColumn($index, column)) {
+          <td class="px-4 py-2 align-middle">
+            <p-skeleton width="80%" height="0.9rem" />
+          </td>
+        }
+
+        @if (hasActions) {
+          <td
+            class="generics-table-actions-column px-4 py-2 align-middle"
+            pFrozenColumn
+            [frozen]="true"
+            alignFrozen="right"
+          >
+            <div class="flex items-center justify-center gap-1">
+              @for (_ of actions; track trackByIndex($index)) {
+                <p-skeleton shape="circle" size="1.7rem" />
+              }
+            </div>
+          </td>
+        }
+      </tr>
+    }
+  </ng-template>
+</p-table>

@@ -1,0 +1,105 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="form-grid">
+    <div class="field md:col-span-3">
+      <label class="field-label">Categoria</label>
+      <app-autocomplete
+        formControlName="categoriaID"
+        [data]="listCategoria"
+        searchKeyword="descricao"
+        placeholder="Digite a categoria"
+        (selected)="selectEvent($event)"
+        [invalid]="f.categoriaID.invalid && (f.categoriaID.touched || f.categoriaID.dirty)"
+      />
+      @if (f.categoriaID.invalid && (f.categoriaID.touched || f.categoriaID.dirty)) {
+        <small class="field-error">Digite a categoria!</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <label class="field-label">Marca</label>
+      <app-autocomplete
+        formControlName="marcaID"
+        [data]="listMarca"
+        searchKeyword="descricao"
+        placeholder="Digite a Marca"
+        (selected)="selectEvent($event)"
+        [invalid]="f.marcaID.invalid && (f.marcaID.touched || f.marcaID.dirty)"
+      />
+      @if (f.marcaID.invalid && (f.marcaID.touched || f.marcaID.dirty)) {
+        <small class="field-error">Digite a marca</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <label class="field-label">Produto</label>
+      <app-autocomplete
+        formControlName="produtoID"
+        [data]="listProduto"
+        searchKeyword="descricao"
+        placeholder="Digite o Produto"
+        (selected)="selectEvent($event)"
+        [invalid]="f.produtoID.invalid && (f.produtoID.touched || f.produtoID.dirty)"
+      />
+      @if (f.produtoID.invalid && (f.produtoID.touched || f.produtoID.dirty)) {
+        <small class="field-error">Digite o produto</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <label class="field-label">Unidade Medida</label>
+      <p-select
+        formControlName="unidadeMedidaID"
+        placeholder="Selecione a Unidade Medida"
+        [options]="listUnidadeMedida"
+        optionValue="codigo"
+        optionLabel="descricao"
+        [showClear]="true"
+        appendTo="body"
+        [invalid]="f.unidadeMedidaID.invalid && (f.unidadeMedidaID.touched || f.unidadeMedidaID.dirty)"
+      />
+      @if (f.unidadeMedidaID.invalid && (f.unidadeMedidaID.touched || f.unidadeMedidaID.dirty)) {
+        <small class="field-error">Selecione a unidade de medida</small>
+      }
+    </div>
+
+    <div class="field md:col-span-6">
+      <label class="field-label" for="subProduto">Tipo Produto</label>
+      <input
+        id="subProduto"
+        pInputText
+        type="text"
+        formControlName="subProduto"
+        placeholder="Informe a descrição"
+        [invalid]="f.subProduto.invalid && (f.subProduto.touched || f.subProduto.dirty)"
+      />
+      @if (f.subProduto.invalid && (f.subProduto.touched || f.subProduto.dirty)) {
+        <small class="field-error">Digite o tipo do produto</small>
+      }
+    </div>
+
+    <div class="field md:col-span-6">
+      <label class="field-label" for="descricaoProduto">Descrição</label>
+      <textarea
+        id="descricaoProduto"
+        pTextarea
+        formControlName="descricaoProduto"
+        placeholder="Informe a descrição"
+        rows="4"
+        [invalid]="f.descricaoProduto.invalid && (f.descricaoProduto.touched || f.descricaoProduto.dirty)"
+      ></textarea>
+      @if (f.descricaoProduto.invalid && (f.descricaoProduto.touched || f.descricaoProduto.dirty)) {
+        <small class="field-error">Digite a descrição</small>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

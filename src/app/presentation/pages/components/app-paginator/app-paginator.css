@@ -1,0 +1,70 @@
+:host ::ng-deep .app-custom-paginator {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 32px !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-paginator-current {
+  margin-right: auto;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  padding: 0 !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-paginator-pages .p-paginator-page,
+:host ::ng-deep .app-custom-paginator .p-paginator-element {
+  min-width: 1.75rem !important;
+  height: 1.75rem !important;
+  border-radius: 6px !important;
+  font-size: 0.75rem !important;
+  margin: 0 2px !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover,
+:host ::ng-deep .app-custom-paginator .p-paginator-element:not(.p-disabled):hover {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #fff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  font-weight: 600 !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-paginator-icon {
+  font-size: 0.7rem !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-select,
+:host ::ng-deep .app-custom-paginator .p-dropdown {
+  height: 1.75rem !important;
+  min-width: 4rem !important;
+  margin-left: 0.75rem !important;
+  border-radius: 6px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #fff !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-select .p-select-label,
+:host ::ng-deep .app-custom-paginator .p-dropdown .p-dropdown-label {
+  padding: 0 0.5rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.75rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+:host ::ng-deep .app-custom-paginator .p-select-dropdown,
+:host ::ng-deep .app-custom-paginator .p-dropdown-trigger {
+  width: 1.5rem !important;
+}

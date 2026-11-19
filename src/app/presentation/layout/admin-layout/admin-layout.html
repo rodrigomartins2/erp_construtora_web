@@ -1,0 +1,44 @@
+<div class="app-container">
+  <app-header
+    [itens]="itens"
+    [loadingMenu]="loading"
+    (clickModalPerfil)="onClickPerfil()"
+    (logoutClick)="logout()"
+  />
+
+  <app-menu-lateral [itens]="itens" [loading]="loading" (logoutClick)="logout()" />
+
+  <main class="app-main" [class.app-main--home]="isHome">
+    @if (showHeader) {
+      <app-page-header />
+    }
+    <div #mainContent class="app-main-content">
+      <router-outlet />
+    </div>
+  </main>
+
+  <footer
+    class="fixed right-0 bottom-0 left-20 z-50 shrink-0 border-t border-slate-400/30 bg-white px-5 py-3.5 max-[640px]:left-0 max-[640px]:hidden max-[640px]:px-3"
+  >
+    <div class="relative flex min-h-6 items-center justify-between gap-3">
+      <div class="flex min-w-0 flex-1 items-center">
+        <h3 class="m-0 text-sm leading-5 font-normal text-(--custom-beige) max-[640px]:text-xs">
+          &copy; {{ anoAtual }} — Todos os direitos reservados.
+        </h3>
+      </div>
+
+      <div class="flex min-w-0 flex-1 items-center justify-end">
+        <h3
+          class="m-0 text-right text-sm leading-5 font-normal text-(--custom-beige) max-[640px]:text-xs"
+          [title]="buildInfo.commit ? 'Commit ' + buildInfo.commit + ' - Build ' + buildInfo.buildDate : ''"
+        >
+          Versão {{ buildInfo.version }}
+        </h3>
+      </div>
+    </div>
+  </footer>
+
+  <app-alterar-senha-dialog [(visible)]="alterarSenhaVisivel" />
+
+  <p-toast position="top-center" appendTo="body" [baseZIndex]="2147483647" [autoZIndex]="true" />
+</div>

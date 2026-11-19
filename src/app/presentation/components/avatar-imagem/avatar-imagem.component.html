@@ -1,0 +1,28 @@
+@if (imagem) {
+  <div class="avatar-image-wrapper relative flex items-center justify-center">
+    <div
+      class="avatar-image-frame flex items-center justify-center"
+      [style]="{ width: tamanho + 'px', height: tamanho + 'px' }"
+    >
+      <p-image
+        [src]="imagemFonte"
+        class="avatar-image flex items-center justify-center"
+        [preview]="preview"
+        [style]="style"
+        appendTo="body"
+        width="{{ tamanho }}"
+        height="{{ tamanho }}"
+      />
+    </div>
+    @if (showDeleteButton) {
+      <span (click)="deleteButtonAction?.()" class="pi pi-trash delete-button"></span>
+    }
+  </div>
+} @else {
+  <p-avatar
+    [label]="nome ? getFirstLetter : ''"
+    [icon]="!nome ? icone : ''"
+    shape="circle"
+    [style]="combinedStyle"
+  />
+}

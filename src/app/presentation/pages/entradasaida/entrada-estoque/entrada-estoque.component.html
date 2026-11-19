@@ -1,0 +1,201 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <!-- Dados da nota -->
+    <div class="form-grid content-start">
+      <div class="field md:col-span-2">
+        <label class="field-label" for="serie">Série</label>
+        <input id="serie" pInputText type="text" formControlName="serie" />
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label" for="numeroNota">Nro. Nota</label>
+        <input
+          id="numeroNota"
+          pInputText
+          type="text"
+          formControlName="numeroNota"
+          [invalid]="f.numeroNota.invalid && (f.numeroNota.touched || f.numeroNota.dirty)"
+        />
+        @if (f.numeroNota.invalid && (f.numeroNota.touched || f.numeroNota.dirty)) {
+          <small class="field-error">Informe o número da nota</small>
+        }
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label" for="dataEmissao">Data Emissão</label>
+        <input
+          id="dataEmissao"
+          pInputText
+          type="date"
+          formControlName="dataEmissao"
+          [invalid]="f.dataEmissao.invalid && (f.dataEmissao.touched || f.dataEmissao.dirty)"
+        />
+        @if (f.dataEmissao.invalid && (f.dataEmissao.touched || f.dataEmissao.dirty)) {
+          <small class="field-error">Informe a data de emissão</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label">Tipo Movimento</label>
+        <p-select
+          formControlName="tipoMovimentoID"
+          placeholder="Tipo de Movimento"
+          [options]="listTipoMovimento"
+          optionValue="codigo"
+          optionLabel="descricao"
+          [showClear]="true"
+          appendTo="body"
+          [invalid]="f.tipoMovimentoID.invalid && (f.tipoMovimentoID.touched || f.tipoMovimentoID.dirty)"
+        />
+        @if (f.tipoMovimentoID.invalid && (f.tipoMovimentoID.touched || f.tipoMovimentoID.dirty)) {
+          <small class="field-error">Selecione o tipo de movimento</small>
+        }
+      </div>
+
+      <div class="field md:col-span-6">
+        <label class="field-label">Cliente/Fornecedor</label>
+        <app-autocomplete
+          formControlName="pessoaID"
+          [data]="listPessoa"
+          searchKeyword="descricao"
+          placeholder="Digite o nome do cliente ou fornecedor"
+          [invalid]="f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)"
+        />
+        @if (f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)) {
+          <small class="field-error">Informe o Cliente/Fornecedor</small>
+        }
+      </div>
+
+      <div class="field md:col-span-6">
+        <label class="field-label">Estoque</label>
+        <p-select
+          formControlName="estoqueID"
+          placeholder="Estoque"
+          [options]="listEstoque"
+          optionValue="codigo"
+          optionLabel="descricao"
+          [showClear]="true"
+          [filter]="true"
+          appendTo="body"
+          [invalid]="f.estoqueID.invalid && (f.estoqueID.touched || f.estoqueID.dirty)"
+        />
+        @if (f.estoqueID.invalid && (f.estoqueID.touched || f.estoqueID.dirty)) {
+          <small class="field-error">Selecione o estoque</small>
+        }
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label" for="descricao">Descrição</label>
+        <textarea id="descricao" pTextarea formControlName="descricao" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Valores -->
+    <div class="form-grid content-start">
+      <div class="field md:col-span-3">
+        <label class="field-label" for="dataMovimento">Data Movimento</label>
+        <input
+          id="dataMovimento"
+          pInputText
+          type="date"
+          formControlName="dataMovimento"
+          [invalid]="f.dataMovimento.invalid && (f.dataMovimento.touched || f.dataMovimento.dirty)"
+        />
+        @if (f.dataMovimento.invalid && (f.dataMovimento.touched || f.dataMovimento.dirty)) {
+          <small class="field-error">Informe a data de movimento</small>
+        }
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Valor Frete</label>
+        <p-inputnumber formControlName="valorFrete" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Valor ICMS</label>
+        <p-inputnumber formControlName="valorICMSSubstituicao" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Valor IPI</label>
+        <p-inputnumber formControlName="valorIPI" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Valor</label>
+        <p-inputnumber
+          formControlName="valor"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          inputStyleClass="text-right"
+          (onBlur)="onCalculaValorTotal(f.valor.value, f.valorAcrescimo.value, f.valorDesconto.value)"
+          [invalid]="f.valor.invalid && (f.valor.touched || f.valor.dirty)"
+        />
+        @if (f.valor.invalid && (f.valor.touched || f.valor.dirty)) {
+          <small class="field-error">Informe o valor</small>
+        }
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Acréscimo</label>
+        <p-inputnumber
+          formControlName="valorAcrescimo"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          inputStyleClass="text-right"
+          (onBlur)="onCalculaValorTotal(f.valor.value, f.valorAcrescimo.value, f.valorDesconto.value)"
+        />
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Desconto</label>
+        <p-inputnumber
+          formControlName="valorDesconto"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          inputStyleClass="text-right"
+          (onBlur)="onCalculaValorTotal(f.valor.value, f.valorAcrescimo.value, f.valorDesconto.value)"
+        />
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label">Valor Total</label>
+        <p-inputnumber formControlName="valorTotal" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label" for="observacao">Observações</label>
+        <textarea id="observacao" pTextarea formControlName="observacao" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Cancelar Nota" icon="fas fa-ban" severity="danger" [outlined]="true" (onClick)="onCancelarNota()" />
+      <p-button label="Itens da Nota" icon="fas fa-list" severity="success" [outlined]="true" (onClick)="abrirModalItens()" />
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>
+
+<ng-template #templateModalItensEstoque>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      Entrada de Itens da Nota Nro. {{ dadosModal.numeroNota }}, de {{ dadosModal.data | date: 'dd/MM/yyyy' }}
+    </h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="onFecharModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-itens-estoque [dadosModal]="dadosModal"></app-itens-estoque>
+  </div>
+</ng-template>

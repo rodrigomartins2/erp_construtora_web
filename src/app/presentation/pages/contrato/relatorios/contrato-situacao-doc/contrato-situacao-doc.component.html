@@ -1,0 +1,23 @@
+<div class="page-card">
+  <form [formGroup]="myform" (ngSubmit)="onRelatorio()" class="flex flex-wrap items-end gap-4">
+    <div class="field w-full md:w-96">
+      <label class="field-label">Empresa Responsável pelo contrato</label>
+      <p-select formControlName="empresaID" placeholder="Selecione Empresa" [options]="listEmpresaPessoa" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+    </div>
+
+    <div class="field">
+      <span class="field-label">Situação</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaSituacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="situacao" [value]="item.codigo" [inputId]="'rel-sit-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <p-button type="submit" label="Gerar" icon="fas fa-file-pdf" [outlined]="true" />
+    <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+  </form>
+</div>

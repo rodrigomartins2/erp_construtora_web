@@ -1,1 +1,376 @@
-/* You can add global styles to this file, and also import other style files */
+/* Ordem das camadas: PrimeNG fica entre o reset (base) e os utilitários do Tailwind,
+   assim classes utilitárias conseguem sobrescrever estilos dos componentes. */
+@layer theme, base, primeng, components, utilities;
+
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+@custom-variant dark (&:where(.app-dark, .app-dark *));
+
+@import "primeicons/primeicons.css";
+
+/* Tokens do design system "Corporate Blue SaaS ERP" (DESIGN.md) como utilitários Tailwind:
+   ex.: bg-brand-navy, text-ink, text-ink-secondary, border-line, bg-ground. */
+@theme {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-brand-primary: #087cf5;
+  --color-brand-secondary: #0759c9;
+  --color-brand-tertiary: #13b8f5;
+  --color-brand-navy: #082b63;
+
+  --color-ground: #f5f8fc;
+  --color-card: #ffffff;
+  --color-ink: #102348;
+  --color-ink-secondary: #64748b;
+  --color-ink-muted: #94a3b8;
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+
+  --color-state-success: #10b981;
+  --color-state-success-bg: #ecfdf5;
+  --color-state-warning: #f59e0b;
+  --color-state-warning-bg: #fffbeb;
+  --color-state-danger: #ef4444;
+  --color-state-danger-bg: #fef2f2;
+  --color-state-info: #087cf5;
+  --color-state-info-bg: #eff6ff;
+
+  --shadow-level-1: 0 4px 20px -2px rgba(8, 43, 99, 0.05);
+  --shadow-level-2: 0 12px 30px -4px rgba(8, 43, 99, 0.1);
+  --shadow-level-3: 0 16px 36px -4px rgba(8, 43, 99, 0.16);
+}
+
+/* ---------- Variáveis do layout ---------- */
+:root {
+  --app-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --app-primary: #087cf5;
+  --app-primary-hover: #0759c9;
+  --app-primary-text: #ffffff;
+  --app-primary-outline-text: #087cf5;
+  --app-brand-navy: #082b63;
+  --app-body-background: #f5f8fc;
+  --app-button-radius: 0.625rem;
+  --surface-a: #ffffff;
+  --custom-dark-gray: #102348;
+  --custom-beige: #64748b;
+  --custom-beige-light: #94a3b8;
+  --app-border: #e2e8f0;
+  --app-border-strong: #cbd5e1;
+}
+
+/* ---------- Base ---------- */
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: var(--app-font-family);
+  font-size: 0.875rem;
+  background: var(--app-body-background);
+  color: #102348;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+.p-component {
+  font-family: var(--app-font-family);
+}
+
+/* Números alinhados em tabelas e totais */
+.mat-mdc-table,
+.p-datatable,
+.p-inputnumber-input {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Botões ---------- */
+.p-button:not(.p-splitbutton .p-button) {
+  min-height: 2.5rem;
+  border-radius: var(--app-button-radius);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.p-button:not(.p-splitbutton .p-button) .p-button-label {
+  font-weight: 600;
+}
+
+.p-button:not(.p-splitbutton .p-button).p-button-rounded {
+  width: 2rem;
+  height: 2rem;
+  min-height: 2rem;
+  padding: 0;
+}
+
+/* Primário institucional: gradiente #087CF5 -> #0759C9 */
+.p-button:not(.p-splitbutton .p-button):not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(
+    .p-button-secondary
+  ):not(.p-button-success):not(.p-button-info):not(.p-button-warn):not(.p-button-help):not(.p-button-danger):not(
+    .p-button-contrast
+  ) {
+  border-color: transparent;
+  background: linear-gradient(to right, #087cf5, #0759c9);
+  color: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+}
+
+.p-button:not(.p-splitbutton .p-button):not(.p-button-outlined):not(.p-button-text):not(.p-button-link):not(
+    .p-button-secondary
+  ):not(.p-button-success):not(.p-button-info):not(.p-button-warn):not(.p-button-help):not(.p-button-danger):not(
+    .p-button-contrast
+  ):not(:disabled):hover {
+  background: linear-gradient(to right, #0759c9, #082b63);
+  box-shadow: var(--shadow-level-2);
+}
+
+.p-button:disabled {
+  opacity: 0.5;
+  filter: grayscale(30%);
+  cursor: not-allowed;
+}
+
+/* ---------- Diálogos ---------- */
+.p-dialog {
+  border-radius: 1rem;
+  box-shadow: var(--shadow-level-2);
+}
+
+.app-dialog-modal .p-dialog-content {
+  padding-bottom: 0;
+}
+
+.app-dialog-modal .p-dialog-footer {
+  padding-top: 1.25rem;
+}
+
+/* Overlays (selects, datepicker, menus) */
+.p-select-overlay,
+.p-autocomplete-overlay,
+.p-datepicker-panel,
+.p-menu-overlay,
+.p-popover {
+  box-shadow: var(--shadow-level-3);
+}
+
+/* Diálogos como "bottom sheet" no celular */
+@media (max-width: 640px) {
+  .app-dialog-modal.p-dialog,
+  .app-confirm-dialog.p-dialog {
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 1.5rem 1.5rem 0 0 !important;
+    max-height: 92vh !important;
+  }
+
+  .p-toast {
+    width: 90vw !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
+
+/* ---------- Componentes reutilizáveis (Tailwind) ---------- */
+@layer components {
+  /* Cartão/painel de página (elevação nível 1) */
+  .page-card {
+    @apply rounded-2xl border border-line bg-card p-5 shadow-level-1;
+  }
+
+  .page-card-header {
+    @apply mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3;
+  }
+
+  .page-card-title {
+    @apply flex items-center gap-2 text-lg font-semibold tracking-tight text-ink;
+  }
+
+  /* Formulários */
+  .form-grid {
+    @apply grid grid-cols-1 gap-x-4 gap-y-3 md:grid-cols-12;
+  }
+
+  .field {
+    @apply flex min-w-0 flex-col gap-1.5;
+  }
+
+  .field-label {
+    @apply text-[13px] font-medium text-ink;
+  }
+
+  .field-error {
+    @apply text-xs text-state-danger;
+  }
+
+  .form-actions {
+    @apply mt-5 flex flex-wrap items-center justify-end gap-2;
+  }
+
+  /* Botões de ação pequenos em tabelas */
+  .table-action {
+    @apply inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-state-info-bg hover:text-brand-primary;
+  }
+
+  .table-action-danger {
+    @apply hover:bg-state-danger-bg hover:text-state-danger;
+  }
+
+  /* Chips de status (Entrada / Saída / Pendente...) */
+  .status-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold;
+  }
+
+  .status-chip-success {
+    @apply bg-state-success-bg text-state-success;
+  }
+
+  .status-chip-danger {
+    @apply bg-state-danger-bg text-state-danger;
+  }
+
+  .status-chip-warning {
+    @apply bg-state-warning-bg text-state-warning;
+  }
+
+  .status-chip-info {
+    @apply bg-state-info-bg text-state-info;
+  }
+
+  /* Modais (ModalService) */
+  .app-modal-panel {
+    @apply max-h-[90vh] max-w-[calc(100vw-2rem)] overflow-auto rounded-2xl bg-card shadow-level-2;
+  }
+
+  .app-modal-backdrop {
+    @apply bg-brand-navy/40 backdrop-blur-[2px];
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between gap-2 border-b border-line px-5 py-3.5;
+  }
+
+  .modal-title {
+    @apply text-lg font-semibold tracking-tight text-ink;
+  }
+
+  .modal-body {
+    @apply px-5 py-4;
+  }
+
+  .modal-footer {
+    @apply flex flex-wrap items-center justify-end gap-2 border-t border-line px-5 py-3;
+  }
+}
+
+/* ---------- Campos de formulário (44px, foco com halo azul) ---------- */
+.p-inputtext,
+.p-select,
+.p-autocomplete,
+.p-inputnumber,
+.p-textarea {
+  width: 100%;
+}
+
+.p-autocomplete-input,
+.p-inputnumber-input {
+  width: 100%;
+}
+
+input.p-inputtext,
+.p-select,
+.p-autocomplete .p-autocomplete-input {
+  min-height: 2.75rem;
+}
+
+.p-inputtext:enabled:focus,
+.p-textarea:enabled:focus,
+.p-select.p-focus,
+.p-autocomplete.p-focus .p-autocomplete-input,
+.p-inputnumber.p-inputwrapper-focus .p-inputnumber-input {
+  box-shadow: 0 0 0 4px rgba(8, 124, 245, 0.15);
+}
+
+/* Inputs desabilitados (modo visualização) */
+.p-inputtext:disabled,
+.p-textarea:disabled {
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  input.p-inputtext,
+  .p-select,
+  .p-autocomplete .p-autocomplete-input {
+    min-height: 3rem;
+  }
+}
+
+/* ---------- Angular Material (tabelas) ---------- */
+.mat-mdc-table {
+  width: 100%;
+  background: transparent !important;
+}
+
+.mat-mdc-table .mdc-data-table__header-row {
+  height: 42px !important;
+  background-color: #f8fafc;
+}
+
+.mat-mdc-table .mat-mdc-header-cell {
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: #64748b;
+  border-bottom-color: #e2e8f0;
+}
+
+.mat-mdc-table .mdc-data-table__row {
+  height: 44px !important;
+}
+
+.mat-mdc-table .mat-mdc-cell {
+  color: #102348;
+  border-bottom-color: #e2e8f0;
+}
+
+.mat-mdc-table .mdc-data-table__row:hover {
+  background-color: rgba(239, 246, 255, 0.6);
+}
+
+.mat-mdc-cell,
+.mat-mdc-header-cell,
+.mat-mdc-footer-cell {
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem !important;
+  font-size: 0.85rem;
+}
+
+.mat-column-button {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap;
+  width: 100px;
+}
+
+.mat-mdc-paginator {
+  font-size: 0.8rem !important;
+  background: transparent !important;
+  color: #64748b !important;
+}
+
+.mat-sort-header-arrow {
+  color: #087cf5 !important;
+}

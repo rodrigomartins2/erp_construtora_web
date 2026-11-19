@@ -1,0 +1,106 @@
+@if (!dadosModal.movimentacaoRealizada) {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-4 rounded-md border border-surface-200 bg-surface-50 p-3">
+    <div class="grid grid-cols-1 items-end gap-3 md:grid-cols-12">
+      <div class="field md:col-span-8">
+        <label class="field-label">Produto</label>
+        <app-autocomplete
+          formControlName="produtoDescricaoID"
+          [data]="listProduto"
+          searchKeyword="descricao"
+          placeholder="Digite o produto"
+          (selected)="selectEvent($event)"
+          [invalid]="f.produtoDescricaoID.invalid && (f.produtoDescricaoID.touched || f.produtoDescricaoID.dirty)"
+        />
+        @if (f.produtoDescricaoID.invalid && (f.produtoDescricaoID.touched || f.produtoDescricaoID.dirty)) {
+          <small class="field-error">Informe o Produto</small>
+        }
+      </div>
+
+      <div class="field md:col-span-1">
+        <label class="field-label" for="quantidade">Quantidade</label>
+        <input
+          id="quantidade"
+          pInputText
+          type="number"
+          min="0"
+          class="text-right"
+          formControlName="quantidade"
+          (blur)="onValorProduto(f.quantidade.value)"
+          [invalid]="f.quantidade.invalid && (f.quantidade.touched || f.quantidade.dirty)"
+        />
+        @if (f.quantidade.invalid && (f.quantidade.touched || f.quantidade.dirty)) {
+          <small class="field-error">Informe a quantidade</small>
+        }
+      </div>
+
+      <div class="field md:col-span-2">
+        <label class="field-label">Valor Total</label>
+        <p-inputnumber formControlName="valorTotal" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="md:col-span-1">
+        <p-button type="submit" label="Inserir" icon="fas fa-save" severity="success" [outlined]="true" styleClass="w-full" />
+      </div>
+    </div>
+  </form>
+}
+
+@if (controleTable) {
+  <div class="min-h-64">
+    @if (!dadosModal.movimentacaoRealizada) {
+      <div class="mb-2 flex justify-end">
+        <p-button label="Movimentar o Estoque" icon="fas fa-sync" [outlined]="true" (onClick)="onMovimentarEstoque()" />
+      </div>
+    }
+
+    <div class="overflow-x-auto rounded-md border border-surface-200">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="itemEntradaSaidaID">
+          <th mat-header-cell *matHeaderCellDef>Código</th>
+          <td mat-cell *matCellDef="let row">{{ row.itemEntradaSaidaID }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef>Produto</th>
+          <td mat-cell *matCellDef="let row">{{ row.descricao }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantidade">
+          <th mat-header-cell *matHeaderCellDef>Quantidade</th>
+          <td mat-cell *matCellDef="let row">{{ row.quantidade }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorUnitario">
+          <th mat-header-cell *matHeaderCellDef>Valor Unitário</th>
+          <td mat-cell *matCellDef="let row">{{ row.valorUnitario | currency: 'BRL' }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorTotal">
+          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <td mat-cell *matCellDef="let row">{{ row.valorTotal | currency: 'BRL' }}</td>
+          <td mat-footer-cell *matFooterCellDef class="font-bold">{{ valorTotalItens | currency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="button">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row" class="text-right">
+            @if (!dadosModal.movimentacaoRealizada) {
+              <a (click)="onExcluir(row)" class="table-action table-action-danger" pTooltip="Excluir item" tooltipPosition="left">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+            }
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+      </table>
+    </div>
+  </div>
+}

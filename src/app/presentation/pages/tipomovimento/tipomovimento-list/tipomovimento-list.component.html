@@ -1,0 +1,116 @@
+<div class="page-card">
+  <div class="page-card-header">
+    <button type="button" class="page-card-title" (click)="filtroAberto = !filtroAberto">
+      <i class="fas fa-filter text-surface-400"></i> Filtro
+      <i class="fas fa-chevron-down text-xs text-surface-400 transition-transform" [class.rotate-180]="filtroAberto"></i>
+    </button>
+    <a routerLink="tipomovimentocadastro/" class="text-sm text-surface-600 hover:text-primary">
+      <i class="fas fa-pen-square"></i> Novo Registro
+    </a>
+  </div>
+
+  @if (filtroAberto) {
+    <form [formGroup]="myform" (ngSubmit)="reloadTable()" class="mb-4 flex flex-wrap items-end gap-4">
+      <div class="field w-full sm:w-64">
+        <label class="field-label" for="filtroHistorico">Histórico</label>
+        <input id="filtroHistorico" pInputText type="text" placeholder="Histórico" formControlName="historico" />
+      </div>
+
+      <div class="field">
+        <span class="field-label">Tipo Movimento</span>
+        <div class="flex h-10 items-center gap-4">
+          @for (item of listaOperacao; track item.codigo) {
+            <label class="flex items-center gap-2 text-sm">
+              <p-radiobutton formControlName="operacao" [value]="item.codigo" [inputId]="'op-' + item.codigo" />
+              {{ item.descricao }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Situação</span>
+        <div class="flex h-10 items-center gap-4">
+          @for (item of listaSituacao; track item.codigo) {
+            <label class="flex items-center gap-2 text-sm">
+              <p-radiobutton formControlName="situacao" [value]="item.codigo" [inputId]="'sit-' + item.codigo" />
+              {{ item.descricao }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <p-button type="submit" label="Buscar" icon="fas fa-search" [outlined]="true" />
+      <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+    </form>
+  }
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="tipoMovimentoID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.tipoMovimentoID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="historico">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Histórico</th>
+        <td mat-cell *matCellDef="let row">{{ row.historico }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Operação</th>
+        <td mat-cell *matCellDef="let row">{{ row.operacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="movimentarEstoque">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Movimentar Estoque</th>
+        <td mat-cell *matCellDef="let row">{{ row.movimentarEstoque }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="geraPrevisao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Gerar Previsão</th>
+        <td mat-cell *matCellDef="let row">{{ row.geraPrevisao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="geraDespesa">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Gerar Despesa</th>
+        <td mat-cell *matCellDef="let row">{{ row.geraDespesa }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="geraReceita">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Gerar Receita</th>
+        <td mat-cell *matCellDef="let row">{{ row.geraReceita }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a [routerLink]="['tipomovimentocadastro/editar', row.tipoMovimentoID, 2]" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a (click)="onExcluir(row)" class="table-action table-action-danger" [pTooltip]="row.status == 'Ativo' ? 'Inativar' : 'Ativar'" tooltipPosition="top">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

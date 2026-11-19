@@ -1,0 +1,99 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="form-grid">
+    <div class="field md:col-span-5">
+      <label class="field-label">Nome</label>
+      <app-autocomplete
+        formControlName="pessoaID"
+        [data]="listPessoa"
+        searchKeyword="descricao"
+        placeholder="Digite o nome do usuário"
+        [invalid]="f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)"
+      />
+      @if (f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)) {
+        <small class="field-error">Informe o nome do usuário</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <label class="field-label">Função</label>
+      <p-select
+        formControlName="funcaoID"
+        placeholder="Selecione a Função"
+        [options]="listFuncao"
+        optionValue="codigo"
+        optionLabel="descricao"
+        [showClear]="true"
+        appendTo="body"
+        [invalid]="f.funcaoID.invalid && (f.funcaoID.touched || f.funcaoID.dirty)"
+      />
+      @if (f.funcaoID.invalid && (f.funcaoID.touched || f.funcaoID.dirty)) {
+        <small class="field-error">Selecione a função</small>
+      }
+    </div>
+
+    <div class="field md:col-span-4">
+      <label class="field-label" for="login">E-mail</label>
+      <input
+        id="login"
+        pInputText
+        type="email"
+        formControlName="login"
+        placeholder="Informe o e-mail"
+        [invalid]="f.login.invalid && (f.login.touched || f.login.dirty)"
+      />
+      @if (f.login.invalid && (f.login.touched || f.login.dirty)) {
+        <small class="field-error">Digite o e-mail</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <label class="field-label" for="senha">Senha</label>
+      <input
+        id="senha"
+        pInputText
+        type="password"
+        maxlength="6"
+        minlength="6"
+        formControlName="senha"
+        placeholder="Digite a senha"
+        [invalid]="f.senha.invalid && (f.senha.touched || f.senha.dirty)"
+      />
+      @if (f.senha.errors?.['minlength']) {
+        <small class="field-error">Digite no mínimo 6 caracteres</small>
+      }
+      @if ((f.senha.touched || f.senha.dirty) && f.senha.errors?.['required']) {
+        <small class="field-error">Digite a senha</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <label class="field-label" for="confirmarSenha">Confirmar Senha</label>
+      <input
+        id="confirmarSenha"
+        pInputText
+        type="password"
+        maxlength="6"
+        minlength="6"
+        formControlName="confirmarSenha"
+        placeholder="Confirme a nova senha"
+        [invalid]="f.confirmarSenha.invalid && (f.confirmarSenha.touched || f.confirmarSenha.dirty)"
+      />
+      @if (f.confirmarSenha.errors?.['minlength']) {
+        <small class="field-error">Digite no mínimo 6 caracteres</small>
+      }
+      @if ((f.confirmarSenha.touched || f.confirmarSenha.dirty) && f.confirmarSenha.errors?.['required']) {
+        <small class="field-error">Confirme a nova senha</small>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

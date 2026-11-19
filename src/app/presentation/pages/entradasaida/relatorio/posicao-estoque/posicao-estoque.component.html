@@ -1,0 +1,30 @@
+<div class="page-card">
+  <form [formGroup]="myform" (ngSubmit)="modalEstoque()" class="form-grid">
+    <div class="field md:col-span-6">
+      <label class="field-label">Tipo Relatório</label>
+      <p-select formControlName="tipoRelatorio" placeholder="Tipo Relatório" [options]="listTipoRelatorios" optionValue="codigo" optionLabel="descricao" [showClear]="true" appendTo="body" />
+    </div>
+
+    <div class="field md:col-span-6">
+      <label class="field-label">Estoque</label>
+      <p-select formControlName="estoqueID" placeholder="Estoque" [options]="listEstoque" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+    </div>
+
+    <div class="flex justify-end gap-2 md:col-span-12">
+      <p-button type="submit" label="Gerar" icon="fas fa-file-pdf" [outlined]="true" />
+      <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+    </div>
+  </form>
+</div>
+
+<ng-template #templateModalRelPosicaoEstoque>
+  <div class="modal-header">
+    <h4 class="modal-title">Posição Estoque, {{ estoque }}</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalRef.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-visualizar-pdf [src]="pdfData" [nomeArquivo]="nomeArquivo"></app-visualizar-pdf>
+  </div>
+</ng-template>

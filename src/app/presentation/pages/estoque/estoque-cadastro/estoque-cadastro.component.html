@@ -1,0 +1,59 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="form-grid">
+    <div class="field md:col-span-5">
+      <label class="field-label">Estoque</label>
+      <app-autocomplete
+        formControlName="estoqueID"
+        [data]="listEstoque"
+        searchKeyword="descricao"
+        placeholder="Digite o estoque"
+        (selected)="selectEvent($event)"
+        [invalid]="f.estoqueID.invalid && (f.estoqueID.touched || f.estoqueID.dirty)"
+      />
+      @if (f.estoqueID.invalid && (f.estoqueID.touched || f.estoqueID.dirty)) {
+        <small class="field-error">Digite o Estoque!</small>
+      }
+    </div>
+
+    <div class="field md:col-span-5">
+      <label class="field-label">Produto</label>
+      <app-autocomplete
+        formControlName="produtoDescricaoID"
+        [data]="listProduto"
+        searchKeyword="descricao"
+        placeholder="Digite o Produto"
+        (selected)="selectEvent($event)"
+        [invalid]="f.produtoDescricaoID.invalid && (f.produtoDescricaoID.touched || f.produtoDescricaoID.dirty)"
+      />
+      @if (f.produtoDescricaoID.invalid && (f.produtoDescricaoID.touched || f.produtoDescricaoID.dirty)) {
+        <small class="field-error">Digite o produto</small>
+      }
+    </div>
+
+    <div class="field md:col-span-2">
+      <label class="field-label" for="qtdeMinima">Qtd. Mínima</label>
+      <input
+        id="qtdeMinima"
+        pInputText
+        type="number"
+        class="text-right"
+        formControlName="qtdeMinima"
+        placeholder="0"
+        [invalid]="f.qtdeMinima.invalid && (f.qtdeMinima.touched || f.qtdeMinima.dirty)"
+      />
+      @if (f.qtdeMinima.invalid && (f.qtdeMinima.touched || f.qtdeMinima.dirty)) {
+        <small class="field-error">Digite a quantidade mínima</small>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

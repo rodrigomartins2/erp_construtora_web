@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="form-grid">
+    <div class="field md:col-span-4">
+      <label class="field-label" for="descricao">Descrição</label>
+      <input
+        id="descricao"
+        pInputText
+        type="text"
+        formControlName="descricao"
+        placeholder="Informe a descrição"
+        [invalid]="f.descricao.invalid && (f.descricao.touched || f.descricao.dirty)"
+      />
+      @if (f.descricao.invalid && (f.descricao.touched || f.descricao.dirty)) {
+        <small class="field-error">Digite a descrição</small>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <h4 class="modal-title">Filtrar Categoria</h4>
+  <button type="button" class="table-action" aria-label="Fechar" (click)="modalRef.hide()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="form" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div class="field">
+      <label class="field-label" for="filtroDescricao">Descrição</label>
+      <input id="filtroDescricao" pInputText type="text" placeholder="Descrição" formControlName="descricao" />
+    </div>
+
+    <div class="field">
+      <label class="field-label">Categoria Principal</label>
+      <p-select
+        formControlName="categoriaPrincipalID"
+        [options]="listCategoriaPrincipal"
+        optionValue="codigo"
+        optionLabel="descricao"
+        [showClear]="true"
+        [filter]="true"
+        appendTo="body"
+        placeholder="Selecione a Categoria"
+      />
+    </div>
+
+    <div class="field">
+      <span class="field-label">Tipo Categoria</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaTipo; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="tipo" [value]="item.codigo" [inputId]="'filtro-tipo-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">Situação</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaSituacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="situacao" [value]="item.codigo" [inputId]="'filtro-sit-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer !justify-between">
+  <p-button label="Limpar" icon="fas fa-trash" severity="secondary" [outlined]="true" (onClick)="limparFiltro()" />
+  <p-button label="Filtrar" icon="fas fa-search" (onClick)="aplicarFiltro()" />
+</div>

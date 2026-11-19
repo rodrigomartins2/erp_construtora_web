@@ -1,0 +1,51 @@
+@if (usePanel) {
+  <div
+    class="content-section"
+    [ngClass]="{ 'rounded-variant': rounded, 'is-collapsed': panel.collapsed }"
+  >
+    <p-panel #panel [toggleable]="true">
+      <ng-template pTemplate="header">
+        <div class="header-left-content">
+          @if (icon) {
+            <div
+              class="section-icon-box"
+              [ngStyle]="{ 'background-color': iconBgColor, color: iconColor }"
+            >
+              <i [class]="icon" class="font-bold"></i>
+            </div>
+          }
+          <div class="header-title-content">
+            <span class="p-panel-title">{{ titleSection }}</span>
+            <div class="header-extra-content">
+              <ng-content select="[headerExtra]"></ng-content>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="icons">
+        <div class="header-right-content">
+          @if (endText) {
+            <span class="section-end-text text-1xl font-bold">{{ endText }}</span>
+          }
+          <p-button
+            class="p-panel-header-icon cursor-pointer"
+            [icon]="panel.collapsed ? 'pi pi-angle-down' : 'pi pi-angle-up'"
+            styleClass="p-button-rounded p-button-text"
+            (click)="panel.toggle($event)"
+          >
+          </p-button>
+        </div>
+      </ng-template>
+      <ng-content></ng-content>
+    </p-panel>
+  </div>
+} @else {
+  <section class="plain-section">
+    <div class="plain-section-header">
+      <span class="plain-section-marker" [style.backgroundColor]="markerColor"></span>
+      <h2 class="plain-section-title">{{ titleSection }}</h2>
+      <ng-content select="[headerExtra]"></ng-content>
+    </div>
+    <ng-content select="[campos]"></ng-content>
+  </section>
+}

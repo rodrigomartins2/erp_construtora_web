@@ -1,0 +1,71 @@
+<div
+  class="flex min-w-0 flex-col gap-1"
+  [ngClass]="{ 'text-red-500 input-autocomplete--error': error }"
+>
+  @if (!loading) {
+    @if (label || showQuickCreate) {
+      <div class="flex min-w-0 items-center justify-between gap-2">
+        @if (label) {
+          <label
+            class="flex min-w-0 items-center gap-0.5 text-[11px] font-bold tracking-wider text-slate-500 uppercase"
+            [for]="inputId || null"
+            [ngClass]="{ 'text-red-500': error }"
+          >
+            <span class="truncate whitespace-nowrap">{{ label }}</span>
+            @if (isRequired) {
+              <span class="flex-none text-red-500">*</span>
+            }
+          </label>
+        }
+        @if (showQuickCreate) {
+          <button
+            type="button"
+            class="ml-auto shrink-0 cursor-pointer text-[11px] font-semibold text-primary-600 hover:text-primary-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+            [disabled]="innerControl.disabled"
+            (click)="onQuickCreate()"
+          >
+            {{ quickCreateLabel }}
+          </button>
+        }
+      </div>
+    }
+
+    <p-autocomplete
+      class="w-full"
+      inputStyleClass="w-full"
+      [ngClass]="{ 'ng-invalid ng-touched ng-dirty': error }"
+      [formControl]="innerControl"
+      [showEmptyMessage]="showEmptyMessage"
+      [suggestions]="suggestions"
+      [optionLabel]="optionLabel"
+      [optionValue]="optionValue"
+      [dataKey]="dataKey"
+      [inputId]="inputId || undefined"
+      [placeholder]="placeholder"
+      [showClear]="showClear"
+      [forceSelection]="forceSelection"
+      [dropdown]="dropdown"
+      [multiple]="multiple"
+      [completeOnFocus]="completeOnFocus && !!innerControl.value"
+      [autoHighlight]="autoHighlight"
+      [minLength]="minLength"
+      [delay]="delay"
+      [emptyMessage]="emptyMessage"
+      [appendTo]="appendTo"
+      [overlayOptions]="overlayOptions"
+      (completeMethod)="onComplete($event)"
+      (onSelect)="onSelect($event)"
+      (onClear)="onClear()"
+      (onBlur)="onBlur()"
+    />
+
+    @if (error && errorMessage) {
+      <small class="text-xs text-red-500">{{ errorMessage }}</small>
+    }
+  } @else {
+    @if (label) {
+      <p-skeleton width="5rem" height="0.75rem" />
+    }
+    <p-skeleton height="34px" class="w-full" />
+  }
+</div>

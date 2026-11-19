@@ -1,0 +1,32 @@
+:host {
+  display: inline-block;
+  min-width: 0;
+}
+
+:host ::ng-deep {
+  .p-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .p-checkbox-box {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 4px;
+    border-color: #cbd5e1;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: var(--p-primary-color, #087CF5);
+    }
+
+    &.p-highlight {
+      background: var(--p-primary-color, #087CF5);
+      border-color: var(--p-primary-color, #087CF5);
+    }
+  }
+
+  .ng-invalid.ng-touched .p-checkbox-box {
+    border-color: #ef4444 !important;
+  }
+}

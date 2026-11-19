@@ -1,0 +1,160 @@
+span {
+    min-width: 85px;
+    min-height: 25px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  
+    padding: 0.5rem;
+    border-radius: 12px;
+  
+    /* font-size: 11px; */
+    font-weight: 600;
+    line-height: 12px;
+    letter-spacing: 0.25px;
+    text-align: center;
+    gap: 4px;
+    color: inherit;
+  }
+  
+  span.azul {
+    background: rgba(238, 242, 255, 1) !important;
+    color: rgba(79, 70, 229, 1) !important;
+  }
+  
+  span.laranja {
+    background: rgba(255, 251, 235, 1) !important;
+    color: rgba(217, 119, 6, 1) !important;
+  }
+  
+  span.laranja-full {
+    background: rgba(237, 114, 24, 1) !important;
+    color: white;
+  }
+  
+  span.vermelho {
+    background: rgb(255, 239, 235) !important;
+    color: rgb(241, 40, 9) !important;
+  }
+  
+  span.verde {
+    background: rgba(0, 255, 135, 0.05) !important;
+    color: rgba(5, 150, 105, 1) !important;
+  }
+  
+  span.cinza {
+    background: rgba(243, 244, 246, 1) !important;
+    color: rgba(55, 65, 81, 1) !important;
+  }
+  
+  span.vermelho {
+    background: rgb(253 184 184);
+    color: rgba(220, 38, 38, 1);
+  }
+  span.cinzaFiltro {
+    color: var(--Grey_5, #959595) !important;
+  }
+  
+  span.xsm {
+    display: flex;
+  height: 24px;
+  padding: var(--Spacing-System-Spacing-6px, 6px) var(--Spacing-System-Spacing-6px, 6px) var(--Spacing-System-Spacing-6px, 6px) var(--Spacing-System-Spacing-12px, 12px);
+  align-items: center;
+  gap: var(--Spacing-System-Spacing-6px, 6px);
+  }
+  
+  span.sm {
+    min-width: 15px;
+  }
+  
+  span.md {
+    width: 145px;
+  }
+  
+  span.xmd {
+    width: 160px;
+  } 
+  
+  span.lg {
+    width: 180px;
+  }
+  
+  span.x-lg {
+    width: max-content;
+  }
+  
+  span.sm-fs {
+    font-size: 11px;
+  }
+  
+  span.md-fs {
+    font-size: 13px;
+  }
+  
+  span.xmd-fs {
+    font-size: 16px;
+  }
+  
+  span.lg-fs {
+    font-size: 18px;
+  }
+  
+  span.x-lg-fs {
+    font-size: 22px;
+  }
+  
+  span.bd-azul {
+    background: rgba(238, 242, 255, 1) !important;  
+    color: rgba(79, 70, 229, 1) !important;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgba(79, 70, 229, 1));
+  }
+  
+  span.bd-laranja {
+    background: rgba(255, 251, 235, 1) !important;
+    color: rgba(217, 119, 6, 1) !important;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgba(217, 119, 6, 1));
+  }
+  
+  span.bd-laranja-full {
+    background: rgba(237, 114, 24, 1) !important;
+    color: white;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgba(237, 114, 24, 1));
+  }
+  
+  span.bd-vermelho {
+    background: rgb(255, 239, 235) !important;
+    color: rgb(241, 40, 9) !important;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgb(241, 40, 9));
+  }
+  
+  span.bd-verde {
+    background: rgba(0, 255, 135, 0.05) !important;
+    color: rgba(5, 150, 105, 1) !important;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgba(5, 150, 105, 1));
+  }
+  
+  span.bd-cinza {
+    background: rgba(243, 244, 246, 1) !important;
+    color: rgba(55, 65, 81, 1) !important;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgba(55, 65, 81, 1));
+  }
+  
+  span.bd-vermelho {
+    background: rgb(253 184 184);
+    color: rgba(220, 38, 38, 1);
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, rgba(220, 38, 38, 1));
+  }
+  span.bd-cinzaFiltro {
+    color: var(--Grey_5, #959595) !important;
+    border-radius: var(--Radius-System-rounded-full, 9999px);
+    border: 1px solid var(--Colors-Prime-Indigo-Prime-Indigo-400, var(--Grey_5, #959595));
+  }
+  

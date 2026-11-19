@@ -1,0 +1,377 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+<!-- eslint-disable @angular-eslint/template/prefer-control-flow -->
+<div
+  class="flex h-full flex-col gap-1"
+  [ngClass]="{ 'text-red-500': error, 'input-text--error': error }"
+>
+  @if (!loading) {
+    <div class="flex justify-between items-center w-full">
+      <label
+        class="flex min-w-0 items-center gap-0.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider"
+        [ngClass]="{ 'text-red-500': error }"
+      >
+        <span class="truncate whitespace-nowrap">{{ label }}</span>
+        <span *ngIf="isRequired" class="text-red-500">*</span>
+      </label>
+
+      @if (label && characterCountLabel) {
+        <p-tag
+          [value]="characterCountLabel"
+          [style]="{
+            background: '#F1F5F9',
+            'border-radius': '6px',
+            'font-size': '12px',
+            color: '#475569',
+            'line-height': '120%',
+            'font-weight': 'bold',
+          }"
+        />
+      }
+
+      @if (helpInfo) {
+        <span class="ml-2 flex items-center text-sm text-[#334155]">
+          <i
+            class="ph-fill ph-question ml-2 text-base cursor-pointer text-[#64748b]"
+            (click)="helpMenu.toggle($event)"
+          ></i>
+
+          <p-menu #helpMenu [popup]="true" appendTo="body" styleClass="w-72">
+            <ng-template pTemplate="start">
+              <div class="flex flex-col p-3">
+                <p class="mt-0 text-sm font-bold text-[#334155]">
+                  {{ helpInfo.label }}
+                </p>
+                @for (section of helpInfo.sections; track $index) {
+                  <div class="flex flex-col gap-2 mt-2">
+                    @if (section.title) {
+                      <p class="text-sm font-semibold text-[#334155]">
+                        {{ section.title }}
+                      </p>
+                    }
+                    @if (section.description) {
+                      <span class="text-xs font-normal leading-[150%]">
+                        {{ section.description }}
+                      </span>
+                    }
+                    @if (section.note) {
+                      <span class="text-[10px] font-medium italic">
+                        {{ section.note }}
+                      </span>
+                    }
+                  </div>
+                }
+              </div>
+            </ng-template>
+          </p-menu>
+        </span>
+      }
+    </div>
+
+    @if (type || iconClass || leftIconClass) {
+      <div class="input-text__field-wrapper">
+        @if (leftIconClass) {
+          <span class="input-text__left-icon" aria-hidden="true">
+            <i [class]="leftIconClass"></i>
+          </span>
+        }
+
+        <p-iconField
+          [iconPosition]="iconPosition"
+          class="input-text__icon-field"
+          [ngClass]="{
+            'cursor-pointer': value,
+            'input-text__icon-field--has-action-icon':
+              type || iconClass || (showClearButton && value && isClearClick),
+          }"
+        >
+          @if (type || (iconClass && !(showClearButton && value))) {
+            <p-inputIcon
+              [styleClass]="
+                ((type ? getIconClassByType(type) : iconClass) || '') + ' text-[#94A3B8]'
+              "
+              (click)="onClickIcon($event)"
+            />
+          }
+
+          @if (showClearButton && value && isClearClick) {
+            <p-inputIcon
+              [styleClass]="'pi pi-times text-[#94A3B8]'"
+              (click)="clearInput()"
+              aria-label="Limpar"
+              title="Limpar"
+            />
+          }
+
+          @switch (tipoInput) {
+            @case ('textArea') {
+              <textarea
+                class="w-full flex-1"
+                [placeholder]="placeholder"
+                [(ngModel)]="value"
+                [rows]="rowsTexArea"
+                [cols]="colsTexArea"
+                [attr.maxlength]="maxLength ?? null"
+                [attr.minlength]="minLength ?? null"
+                pInputTextarea
+                (focus)="onTouched()"
+                (input)="onChange(value)"
+                [disabled]="disable"
+                (blur)="onBlur()"
+                [title]="value || ''"
+                [ariaLabel]="value || ''"
+                [ngClass]="{ 'input-text__control--with-left-icon': leftIconClass }"
+                [style]="{
+                  width: '100%',
+                  height: textAreaHeight || 'auto',
+                  resize: textAreaResizable ? 'both' : 'none',
+                }"
+              ></textarea>
+            }
+            @case ('inputMask') {
+              <p-inputMask
+                [inputId]="inputId || undefined"
+                styleClass="w-full"
+                [placeholder]="placeholder"
+                [(ngModel)]="value"
+                [attr.maxlength]="maxLength ?? null"
+                [attr.minlength]="minLength ?? null"
+                (focus)="onTouched()"
+                (ngModelChange)="onChange($event)"
+                (keyup.enter)="onEnter()"
+                [disabled]="disable"
+                (onBlur)="onBlur()"
+                [autocomplete]="autocomplete"
+                [mask]="mask"
+                [unmask]="dropSpecialCharacters || false"
+                [title]="value || ''"
+                [ariaLabel]="value || ''"
+                [ngClass]="{ 'input-text__control--with-left-icon': leftIconClass }"
+              />
+            }
+            @case ('inputNumber') {
+              @if (numberProp!.mode) {
+                <p-inputNumber
+                  inputId="templatedisplay"
+                  class="w-full"
+                  [placeholder]="placeholder"
+                  (ngModelChange)="onChange($event)"
+                  [(ngModel)]="value"
+                  (focus)="onTouched()"
+                  (onInput)="manterCursorNoFinal($event)"
+                  [showButtons]="numberProp!.showButtons"
+                  [disabled]="disable"
+                  (keyup.enter)="onEnter()"
+                  (onBlur)="onBlur()"
+                  [title]="value || ''"
+                  [ariaLabel]="value || ''"
+                  [mode]="numberProp!.mode"
+                  locale="pt-BR"
+                  [ngClass]="{ 'input-text__control--with-left-icon': leftIconClass }"
+                  [currency]="numberProp!.currency"
+                  [suffix]="numberProp!.suffix"
+                  [prefix]="numberProp!.prefix"
+                  [minFractionDigits]="numberProp!.minFractionDigits"
+                  [maxFractionDigits]="numberProp!.maxFractionDigits"
+                  [ngClass]="{ 'ng-invalid ng-touched ng-dirty': error }"
+                  [style]="{
+                    width: '100%',
+                  }"
+                />
+              } @else {
+                <p-inputNumber
+                  inputId="templatedisplay"
+                  class="w-full"
+                  (ngModelChange)="onChange($event)"
+                  [(ngModel)]="value"
+                  [showButtons]="numberProp!.showButtons"
+                  locale="pt-BR"
+                  [suffix]="numberProp!.suffix"
+                  [prefix]="numberProp!.prefix"
+                  [placeholder]="placeholder"
+                  [useGrouping]="numberProp!.useGrouping"
+                  (focus)="onTouched()"
+                  (input)="onChange(value)"
+                  [maxlength]="numberProp!.maxlength"
+                  (keyup.enter)="onEnter()"
+                  [ngClass]="{ 'ng-invalid ng-touched ng-dirty': error }"
+                  [disabled]="disable"
+                  [title]="value || ''"
+                  [ariaLabel]="value || ''"
+                  (onBlur)="onBlur()"
+                  [style]="{
+                    width: '100%',
+                  }"
+                />
+              }
+            }
+            @default {
+              @if (isLink && disable && value) {
+                <div
+                  class="w-full flex items-center gap-2 cursor-pointer link-input"
+                  (click)="linkClick.emit()"
+                  [title]="value || ''"
+                  [ariaLabel]="value || ''"
+                >
+                  <span
+                    class="flex gap-3 overflow-hidden whitespace-nowrap text-ellipsis underline"
+                  >
+                    {{ value }}
+                    <span class="text-sm no-underline" [class]="linkIcon"></span>
+                  </span>
+                </div>
+              } @else {
+                <input
+                  [id]="inputId || null"
+                  class="w-full"
+                  pInputText
+                  [type]="nativeInputType"
+                  [placeholder]="placeholder"
+                  [(ngModel)]="value"
+                  (focus)="onTouched()"
+                  (input)="onChange(value)"
+                  (keyup.enter)="onEnter()"
+                  [disabled]="disable"
+                  (blur)="onBlur()"
+                  [autocomplete]="autocomplete"
+                  [title]="value || ''"
+                  [ariaLabel]="value || ''"
+                  [ngClass]="{ 'input-text__control--with-left-icon': leftIconClass }"
+                />
+              }
+            }
+          }
+        </p-iconField>
+      </div>
+    } @else {
+      @switch (tipoInput) {
+        @case ('textArea') {
+          <textarea
+            class="w-full flex-1"
+            [placeholder]="placeholder"
+            [(ngModel)]="value"
+            [rows]="rowsTexArea"
+            [cols]="colsTexArea"
+            pInputTextarea
+            (focus)="onTouched()"
+            (input)="onChange(value)"
+            [disabled]="disable"
+            (blur)="onBlur()"
+            [title]="value || ''"
+            [ariaLabel]="value || ''"
+            [style]="{
+              width: '100%',
+              height: textAreaHeight || 'auto',
+              resize: textAreaResizable ? 'both' : 'none',
+            }"
+          ></textarea>
+        }
+        @case ('inputMask') {
+          <p-inputMask
+            [inputId]="inputId || undefined"
+            styleClass="w-full"
+            [placeholder]="placeholder"
+            [(ngModel)]="value"
+            (focus)="onTouched()"
+            (ngModelChange)="onChange($event)"
+            (keyup.enter)="onEnter()"
+            [disabled]="disable"
+            (onBlur)="onBlur()"
+            [autocomplete]="autocomplete"
+            [mask]="mask"
+            [unmask]="dropSpecialCharacters || false"
+            [title]="value"
+            [ariaLabel]="value"
+          />
+        }
+        @case ('inputNumber') {
+          @if (numberProp!.mode) {
+            <p-inputNumber
+              class="w-full"
+              [placeholder]="placeholder"
+              (ngModelChange)="onChange($event)"
+              [(ngModel)]="value"
+              (focus)="onTouched()"
+              (onInput)="manterCursorNoFinal($event)"
+              [showButtons]="numberProp!.showButtons"
+              [disabled]="disable"
+              (keyup.enter)="onEnter()"
+              (onBlur)="onBlur()"
+              [title]="value || ''"
+              [ariaLabel]="value || ''"
+              [mode]="numberProp!.mode"
+              locale="pt-BR"
+              [currency]="numberProp!.currency"
+              [suffix]="numberProp!.suffix"
+              [prefix]="numberProp!.prefix"
+              [minFractionDigits]="numberProp!.minFractionDigits"
+              [maxFractionDigits]="numberProp!.maxFractionDigits"
+              [ngClass]="{ 'ng-invalid ng-touched ng-dirty': error }"
+              [style]="{
+                width: '100%',
+              }"
+            />
+          } @else {
+            <p-inputNumber
+              class="w-full"
+              (ngModelChange)="onChange($event)"
+              [(ngModel)]="value"
+              [showButtons]="numberProp!.showButtons"
+              locale="pt-BR"
+              [suffix]="numberProp!.suffix"
+              [prefix]="numberProp!.prefix"
+              [placeholder]="placeholder"
+              [useGrouping]="numberProp!.useGrouping"
+              (focus)="onTouched()"
+              (input)="onChange(value)"
+              [maxlength]="numberProp!.maxlength"
+              (keyup.enter)="onEnter()"
+              [ngClass]="{ 'ng-invalid ng-touched ng-dirty': error }"
+              [disabled]="disable"
+              [title]="value || ''"
+              [ariaLabel]="value || ''"
+              (onBlur)="onBlur()"
+              [style]="{
+                width: '100%',
+              }"
+            />
+          }
+        }
+        @default {
+          @if (isLink && disable && value) {
+            <div
+              class="w-full flex items-center gap-2 cursor-pointer link-input"
+              (click)="linkClick.emit()"
+              [title]="value || ''"
+              [ariaLabel]="value || ''"
+            >
+              <span class="flex gap-3 text-ellipsis overflow-hidden whitespace-nowrap underline">
+                {{ value }}
+                <span class="text-sm no-underline" [class]="linkIcon"></span>
+              </span>
+            </div>
+          } @else {
+            <input
+              [id]="inputId || null"
+              class="w-full"
+              pInputText
+              [type]="nativeInputType"
+              [placeholder]="placeholder"
+              [(ngModel)]="value"
+              (focus)="onTouched()"
+              (input)="onChange(value)"
+              (keyup.enter)="onEnter()"
+              [disabled]="disable"
+              (blur)="onBlur()"
+              [autocomplete]="autocomplete"
+              [title]="value || ''"
+              [ariaLabel]="value || ''"
+            />
+          }
+        }
+      }
+    }
+  } @else {
+    <p-skeleton width="5rem" class="gap-1"></p-skeleton>
+    <p-skeleton height="34px" class="w-full"></p-skeleton>
+  }
+</div>

@@ -1,0 +1,104 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="form-grid content-start">
+      <div class="field md:col-span-12">
+        <label class="field-label">Cliente/Fornecedor</label>
+        <app-autocomplete
+          formControlName="pessoaID"
+          [data]="listPessoa"
+          searchKeyword="descricao"
+          placeholder="Digite o nome do cliente ou fornecedor"
+        />
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label">Obra</label>
+        <p-select formControlName="obraID" placeholder="Obra / Contrato" [options]="listObra" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label" for="descricao">Descrição</label>
+        <textarea id="descricao" pTextarea formControlName="descricao" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="form-grid content-start">
+      <div class="field md:col-span-8">
+        <label class="field-label">Tipo Movimento</label>
+        <p-select
+          formControlName="tipoMovimentoID"
+          placeholder="Tipo de Movimento"
+          [options]="listTipoMovimento"
+          optionValue="codigo"
+          optionLabel="descricao"
+          [showClear]="true"
+          appendTo="body"
+          [invalid]="f.tipoMovimentoID.invalid && (f.tipoMovimentoID.touched || f.tipoMovimentoID.dirty)"
+        />
+        @if (f.tipoMovimentoID.invalid && (f.tipoMovimentoID.touched || f.tipoMovimentoID.dirty)) {
+          <small class="field-error">Selecione o tipo de movimento</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataMovimento">Data Movimento</label>
+        <input
+          id="dataMovimento"
+          pInputText
+          type="date"
+          formControlName="dataMovimento"
+          [invalid]="f.dataMovimento.invalid && (f.dataMovimento.touched || f.dataMovimento.dirty)"
+        />
+        @if (f.dataMovimento.invalid && (f.dataMovimento.touched || f.dataMovimento.dirty)) {
+          <small class="field-error">Informe a data de movimento</small>
+        }
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label" for="observacao">Observações</label>
+        <textarea id="observacao" pTextarea formControlName="observacao" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Relatório Expedição" icon="fas fa-file-pdf" severity="success" [outlined]="true" (onClick)="abrirModalRelExpedicao()" />
+      <p-button label="Cancelar Nota" icon="fas fa-ban" severity="danger" [outlined]="true" (onClick)="onCancelarNota()" />
+      <p-button label="Itens da Nota" icon="fas fa-list" severity="warn" [outlined]="true" (onClick)="abrirModalItens()" />
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>
+
+<ng-template #templateModalItensEstoque>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      Saída de Itens da Nota Nro. {{ dadosModal.numeroNota }}, de {{ dadosModal.data | date: 'dd/MM/yyyy' }}
+    </h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="onFecharModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-itens-estoque-saida [dadosModal]="dadosModal"></app-itens-estoque-saida>
+  </div>
+</ng-template>
+
+<ng-template #templateModalRelatorioExpedicao>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      Expedição de Materiais {{ dadosModal.numeroNota }}, de {{ dadosModal.data | date: 'dd/MM/yyyy' }}
+    </h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="onFecharModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-visualizar-pdf [src]="pdfData" [nomeArquivo]="nomeArquivo"></app-visualizar-pdf>
+  </div>
+</ng-template>

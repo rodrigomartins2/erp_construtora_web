@@ -1,0 +1,45 @@
+:host {
+  display: inline-flex;
+}
+
+.avatar-image-wrapper {
+  line-height: 0;
+}
+
+.avatar-image-frame {
+  overflow: hidden;
+  border-radius: 9999px;
+  line-height: 0;
+}
+
+:host ::ng-deep .avatar-image,
+:host ::ng-deep .avatar-image .p-image,
+:host ::ng-deep .avatar-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+:host ::ng-deep .avatar-image img {
+  object-fit: cover;
+  object-position: center;
+  vertical-align: top;
+}
+
+.delete-button {
+  background: #fbc8c8;
+  color: #a81c1c;
+  position: absolute;
+  border-radius: 50%;
+  padding: 0.3rem;
+  bottom: 0;
+  right: -0.4rem;
+  cursor: pointer;
+
+  transition: ease 0.3s;
+
+  &:hover {
+    background: #a81c1c;
+    color: #fbc8c8;
+  }
+}

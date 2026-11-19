@@ -1,0 +1,196 @@
+:host {
+  display: block;
+  font-size: 13px;
+}
+
+:host ::ng-deep .generics-table-base {
+  border: 1px solid var(--surface-border, #dee2e6);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-header {
+  background: #f8fafc;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-thead > tr > th {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-tbody > tr > td {
+  padding: 0.25rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Paginator compacto */
+:host ::ng-deep .generics-table-base .p-paginator {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 0 0.5rem !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+}
+
+:host ::ng-deep .generics-table-base .p-paginator .p-paginator-current {
+  font-size: 11px;
+  color: #64748b;
+  margin-right: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+:host ::ng-deep .generics-table-base .p-paginator .p-paginator-pages .p-paginator-page,
+:host ::ng-deep .generics-table-base .p-paginator .p-link {
+  min-width: 1.35rem;
+  height: 1.35rem;
+  font-size: 10px;
+  margin: 0 1px;
+  border-radius: 4px;
+}
+
+:host ::ng-deep .generics-table-base .p-paginator .p-paginator-icon {
+  font-size: 9px;
+}
+
+/* Redução do Select do Paginador */
+:host ::ng-deep .generics-table-base .p-paginator .p-select,
+:host ::ng-deep .generics-table-base .p-paginator .p-dropdown {
+  height: 28px !important;
+  min-height: 28px !important;
+  align-items: center;
+}
+
+:host ::ng-deep .generics-table-base .p-paginator .p-select .p-select-label,
+:host ::ng-deep .generics-table-base .p-paginator .p-dropdown .p-dropdown-label {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 22px !important;
+  height: 22px !important;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilização da Barra de Rolagem */
+:host ::ng-deep .generics-table-base .p-datatable-wrapper::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Firefox */
+:host ::ng-deep .generics-table-base .p-datatable-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-loading-overlay {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+:host ::ng-deep .generics-table-base .p-datatable-thead > tr > th,
+:host ::ng-deep .generics-table-base .p-datatable-tbody > tr > td {
+  overflow: hidden;
+}
+
+:host ::ng-deep .generics-table-base .generics-table-actions-column {
+  width: 7rem;
+  min-width: 7rem;
+  max-width: 7rem;
+  background: #fff !important;
+  border-left: 1px solid #f1f5f9;
+}
+
+:host ::ng-deep .generics-table-base .generics-table-actions-column--sticky {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  box-shadow: -10px 0 14px -12px rgba(15, 23, 42, 0.35);
+}
+
+:host
+  ::ng-deep
+  .generics-table-base
+  .p-datatable-thead
+  > tr
+  > th.generics-table-actions-column--sticky {
+  z-index: 4;
+}
+
+:host
+  ::ng-deep
+  .generics-table-base
+  .p-datatable-tbody
+  > tr:hover
+  td.generics-table-actions-column {
+  background-color: #fff !important;
+}
+
+:host ::ng-deep .generics-table-base .generics-table-action-button.p-button {
+  width: 1.7rem !important;
+  min-width: 1.7rem !important;
+  max-width: 1.7rem !important;
+  height: 1.7rem !important;
+  min-height: 1.7rem !important;
+  max-height: 1.7rem !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden;
+  box-sizing: border-box !important;
+  flex: 0 0 auto;
+}
+
+:host ::ng-deep .generics-table-base .generics-table-action-button.p-button .p-button-icon {
+  font-size: 0.82rem;
+  margin: 0 !important;
+  line-height: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+:host ::ng-deep .generics-table-base .generics-table-action-button.p-button .p-button-content {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:host ::ng-deep .generics-table-base .generics-table-action-button.p-button .p-button-label {
+  display: none;
+}

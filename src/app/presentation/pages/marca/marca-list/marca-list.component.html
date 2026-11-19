@@ -1,0 +1,76 @@
+<div class="page-card">
+  <div class="page-card-header">
+    <button type="button" class="page-card-title" (click)="filtroAberto = !filtroAberto">
+      <i class="fas fa-filter text-surface-400"></i> Filtro
+      <i class="fas fa-chevron-down text-xs text-surface-400 transition-transform" [class.rotate-180]="filtroAberto"></i>
+    </button>
+    <a routerLink="marcacadastro/" class="text-sm text-surface-600 hover:text-primary">
+      <i class="fas fa-pen-square"></i> Novo Registro
+    </a>
+  </div>
+
+  @if (filtroAberto) {
+    <form [formGroup]="myform" (ngSubmit)="reloadTable()" class="mb-4 flex flex-wrap items-end gap-3">
+      <div class="field w-full sm:w-64">
+        <input pInputText type="text" placeholder="Descrição" formControlName="descricao" />
+      </div>
+      <div class="field w-full sm:w-52">
+        <p-select
+          formControlName="situacao"
+          placeholder="Selecione a Situação"
+          [options]="listaSituacao"
+          optionValue="codigo"
+          optionLabel="descricao"
+          [showClear]="true"
+          appendTo="body"
+        />
+      </div>
+      <p-button type="submit" label="Buscar" icon="fas fa-search" [outlined]="true" />
+      <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+    </form>
+  }
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="marcaID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.marcaID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+        <td mat-cell *matCellDef="let row">{{ row.descricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a [routerLink]="['marcacadastro/editar', row.marcaID, 2]" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a (click)="onExcluir(row)" class="table-action table-action-danger" [pTooltip]="row.status == 'Ativo' ? 'Inativar' : 'Ativar'" tooltipPosition="top">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,187 @@
+@if (!useCardView) {
+  <p-table
+    [value]="effectiveLoading ? skeletonRows : tableData"
+    [paginator]="paginator"
+    [alwaysShowPaginator]="alwaysShowPaginator"
+    [rows]="rows"
+    [first]="first"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [loading]="false"
+    [totalRecords]="totalRecordsCount"
+    [lazy]="isRemotePagedMode"
+    [tableStyle]="{ 'min-width': minWidth, 'table-layout': 'fixed' }"
+    [sortField]="sortField"
+    [sortOrder]="sortOrder"
+    sortMode="single"
+    styleClass="generics-table-base"
+    currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} itens"
+    [showCurrentPageReport]="showCurrentPageReport"
+    paginatorDropdownAppendTo="body"
+    [scrollable]="true"
+    (onSort)="onSort($event)"
+    (onPage)="onPageChange($event)"
+  >
+    <ng-template #header>
+      <tr>
+        @if (isSelectionActive) {
+          <th
+            class="w-10 px-3 py-1.5 text-center text-[11px] font-semibold uppercase text-[#102348] bg-white border-b border-slate-200"
+          >
+            @if (effectiveSelectionMode === 'multiple') {
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="allCurrentPageRowsSelected"
+                (ngModelChange)="toggleCurrentPageSelection($event)"
+              />
+            }
+          </th>
+        }
+        @for (column of columns; track trackByColumn($index)) {
+          <th
+            class="px-3 py-1.5 text-[11px] font-semibold uppercase text-[#102348] bg-white border-b border-slate-200"
+            [ngClass]="[getAlignClass(column.align), column.styleClass || '']"
+            [ngStyle]="getColumnStyle(column)"
+            [pSortableColumn]="column.sortable !== false ? column.field : undefined"
+          >
+            <span
+              class="inline-flex items-center gap-1.5"
+              [ngClass]="getJustifyClass(column.align)"
+            >
+              {{ column.header }}
+              @if (column.sortable !== false) {
+                <p-sortIcon [field]="column.field" styleClass="text-[10px]" />
+              }
+            </span>
+          </th>
+        }
+
+        @if (hasActions) {
+          <th
+            class="generics-table-actions-column w-28 px-3 py-1.5 text-center text-[11px] font-semibold uppercase text-[#102348] border-b border-slate-200"
+            [class.generics-table-actions-column--sticky]="freezeActionsColumn"
+          >
+            Ações
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-row>
+      <tr class="transition-colors hover:bg-slate-50">
+        @if (isSelectionActive) {
+          <td class="w-10 px-3 py-1.5 align-middle text-center">
+            @if (effectiveLoading) {
+              <p-skeleton shape="circle" size="1rem" />
+            } @else {
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="isRowSelected(row)"
+                (ngModelChange)="toggleRowSelection(row, $event)"
+                (click)="$event.stopPropagation()"
+              />
+            }
+          </td>
+        }
+        @for (column of columns; track trackByColumn($index)) {
+          <td
+            class="px-3 py-1.5 text-[13px] text-[#566166]"
+            [ngClass]="[getAlignClass(column.align), column.styleClass || '']"
+            [ngStyle]="getColumnStyle(column)"
+          >
+            @if (effectiveLoading) {
+              <p-skeleton width="80%" height="0.85rem" />
+            } @else if (column.template) {
+              <ng-container
+                *ngTemplateOutlet="
+                  column.template;
+                  context: { $implicit: row, field: column.field }
+                "
+              />
+            } @else if (column.type === 'badge') {
+              <span
+                class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
+                [ngClass]="getBadgeClass(row, column)"
+              >
+                {{ getDisplayValue(row, column) }}
+              </span>
+            } @else {
+              <span
+                class="inline-block max-w-full align-middle"
+                [class.truncate]="!column.wrap"
+                [class.whitespace-normal]="column.wrap"
+                [class.break-words]="column.wrap"
+                [class.font-medium]="column.type !== 'date'"
+                [pTooltip]="column.wrap ? undefined : getDisplayValue(row, column)"
+                tooltipPosition="top"
+              >
+                {{ getDisplayValue(row, column) }}
+              </span>
+            }
+          </td>
+        }
+
+        @if (hasActions) {
+          <td
+            class="generics-table-actions-column px-3 py-1.5 align-middle"
+            [class.generics-table-actions-column--sticky]="freezeActionsColumn"
+          >
+            <div class="flex items-center justify-center gap-1">
+              @if (effectiveLoading) {
+                @for (_ of actions.length ? actions : [null]; track $index) {
+                  <p-skeleton shape="circle" size="1.7rem" />
+                }
+              } @else {
+                @for (action of getVisibleActions(row); track $index) {
+                  <p-button
+                    [icon]="action.icon"
+                    [outlined]="true"
+                    [rounded]="true"
+                    [severity]="action.severity || 'secondary'"
+                    [disabled]="action.disabled ? action.disabled(row) : false"
+                    [pTooltip]="action.tooltip || action.ariaLabel || action.label"
+                    tooltipPosition="top"
+                    [styleClass]="getActionButtonClass(action)"
+                    (onClick)="$event.stopPropagation(); action.action(row)"
+                  />
+                }
+              }
+            </div>
+          </td>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td
+          class="px-4 py-6 text-center text-sm text-slate-500"
+          [attr.colspan]="columns.length + (hasActions ? 1 : 0) + (isSelectionActive ? 1 : 0)"
+        >
+          {{ emptyMessage }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+} @else {
+  <!-- Mobile View: Card Carousel -->
+  <app-generics-table-base-mobile
+    [columns]="columns"
+    [data]="tableData"
+    [actions]="actions"
+    [loading]="effectiveLoading"
+    [totalRecords]="totalRecordsCount"
+    [rows]="rows"
+    [first]="first"
+    [skeletonRowCount]="skeletonRowCount"
+    [emptyMessage]="emptyMessage"
+    [cardTitleField]="cardTitleField"
+    [getDisplayValue]="getDisplayValue"
+    [getVisibleActions]="getVisibleActions"
+    [cardTemplate]="cardTemplate"
+    [selectionEnabled]="isSelectionActive"
+    [selectionMode]="effectiveSelectionMode"
+    [isRowSelected]="isRowSelected"
+    [onToggleRow]="toggleRowSelection"
+    (pageChange)="onPageChange($event)"
+  />
+}

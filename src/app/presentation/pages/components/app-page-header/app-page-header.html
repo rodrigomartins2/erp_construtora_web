@@ -1,0 +1,199 @@
+<div
+  #sentinel
+  class="w-full relative"
+  style="height: 1px; margin-bottom: -1px; visibility: hidden; pointer-events: none"
+></div>
+
+<div #headerContainer class="header-wrapper surface-card" [class.fixed-header]="isSticky()">
+  <div
+    class="flex min-w-0 items-center justify-between gap-4 bg-(--app-body-background) px-5 py-3 max-[1299px]:flex-wrap max-[1299px]:items-center max-[1299px]:gap-3"
+  >
+    <div
+      class="flex min-w-0 flex-1 items-center gap-3 max-[1299px]:flex-[1_0_auto] max-[1299px]:min-w-[200px]"
+    >
+      @if (showBackButton()) {
+        <p-button
+          icon="pi pi-arrow-left"
+          label="Voltar"
+          severity="primary"
+          (onClick)="onClickBack()"
+          [text]="true"
+        />
+      }
+
+      <div class="flex min-w-0 flex-col gap-1">
+        @if (moduleName()) {
+          <span
+            class="wrap-break-word text-[11px] font-semibold uppercase tracking-wider text-slate-500"
+          >
+            {{ moduleName() }}
+          </span>
+        }
+        @if (titleTemplate()) {
+          <div class="flex flex-wrap items-center gap-3">
+            <h1
+              class="m-0 wrap-break-word text-2xl font-semibold leading-8 text-slate-800 max-[1299px]:text-lg"
+            >
+              {{ title() }}
+            </h1>
+            <ng-container *ngTemplateOutlet="titleTemplate()"></ng-container>
+          </div>
+        } @else {
+          <h1
+            class="m-0 wrap-break-word text-2xl font-semibold leading-8 text-slate-800 max-[1299px]:text-lg"
+          >
+            {{ title() }}
+          </h1>
+        }
+        @if (subtitle()) {
+          <span class="wrap-break-word text-sm font-medium text-slate-500 max-[1299px]:hidden">{{
+            subtitle()
+          }}</span>
+        }
+      </div>
+    </div>
+
+    <div
+      class="header-actions flex shrink-0 items-center justify-end gap-2 max-[1299px]:flex-[1_0_auto] max-[1299px]:justify-end"
+    >
+      <!-- @if (saveStatus()) {
+                <app-header-save-status [status]="saveStatus()!" />
+            } -->
+
+      @for (btn of rightButtons(); track $index) {
+        @if (btn.showIf !== false) {
+          @if (btn.loading || (btn.iconType === 'material' && !materialIconsReady())) {
+            <p-skeleton
+              height="2.25rem"
+              [style]="{ width: btn.label ? '8rem' : '2.25rem', 'border-radius': '8px' }"
+            />
+          } @else {
+            <p-button
+              [icon]="!btn.template && btn.iconType !== 'material' ? btn.icon : undefined"
+              [label]="!btn.template && btn.iconType !== 'material' ? btn.label : undefined"
+              [outlined]="btn.outlined"
+              [rounded]="btn.rounded"
+              [iconPos]="btn.iconPos || 'left'"
+              [title]="btn.altText || btn.label"
+              [disabled]="btn.disable"
+              [ngClass]="btn.className"
+              [style]="btn.style || {}"
+              [severity]="btn.severity || 'primary'"
+              (onClick)="btn.action()"
+            >
+              @if (btn.template) {
+                <ng-container *ngTemplateOutlet="btn.template"></ng-container>
+              } @else if (btn.iconType === 'material') {
+                <span class="inline-flex items-center gap-2">
+                  @if (btn.iconPos !== 'right' && btn.icon) {
+                    <span class="material-symbols-outlined app-button-material-icon">{{
+                      btn.icon
+                    }}</span>
+                  }
+                  @if (btn.label) {
+                    <span class="p-button-label">{{ btn.label }}</span>
+                  }
+                  @if (btn.iconPos === 'right' && btn.icon) {
+                    <span class="material-symbols-outlined app-button-material-icon">{{
+                      btn.icon
+                    }}</span>
+                  }
+                </span>
+              }
+            </p-button>
+          }
+        }
+      }
+
+      @if (showCreateButton()) {
+        <p-button
+          icon="pi pi-plus"
+          [label]="createButtonLabel()"
+          iconPos="right"
+          severity="primary"
+          (onClick)="onCreateClick()"
+        />
+      }
+
+      @if (showCancelButton()) {
+        <p-button
+          class="cancel-action"
+          icon="pi pi-times"
+          label="Cancelar"
+          iconPos="right"
+          severity="secondary"
+          (onClick)="onCancelClick()"
+          [outlined]="!isMobileViewport()"
+        />
+      }
+
+      @if (showSaveButton()) {
+        <p-button
+          class="save-action"
+          icon="pi pi-check"
+          [label]="saveButtonLabel()"
+          iconPos="right"
+          severity="primary"
+          styleClass="edit-action"
+          (onClick)="onSaveClick()"
+        />
+      }
+
+      @if (showRouteEditButton()) {
+        <p-button
+          icon="pi pi-pencil"
+          [label]="editButtonLabel()"
+          iconPos="right"
+          [outlined]="!isMobileViewport()"
+          severity="primary"
+          styleClass="edit-action"
+          (onClick)="onRouteEditClick()"
+        />
+      }
+
+      @if (showEditButton()) {
+        <p-button
+          icon="pi pi-pencil"
+          [label]="editButtonLabel()"
+          iconPos="right"
+          [outlined]="true"
+          severity="primary"
+          styleClass="edit-action"
+          (onClick)="onEditClick()"
+        />
+      }
+    </div>
+  </div>
+
+  @if (anchors().length > 0) {
+    <div class="anchors-container fadein animation-duration-300 bg-[var(--app-body-background)]">
+      @if (showLeftArrow()) {
+        <button class="nav-arrow" (click)="scrollAnchors('left')" aria-label="Scroll Left">
+          <i class="pi pi-chevron-left"></i>
+        </button>
+      }
+
+      <div class="scroll-wrapper" #anchorList (scroll)="onAnchorScroll()">
+        @for (anchor of anchors(); track anchor.targetId) {
+          <div
+            class="anchor-pill"
+            [class.active]="activeAnchor() === anchor.targetId"
+            (click)="scrollToAnchor(anchor.targetId)"
+          >
+            {{ anchor.label }}
+          </div>
+        }
+      </div>
+
+      @if (showRightArrow()) {
+        <button class="nav-arrow" (click)="scrollAnchors('right')" aria-label="Scroll Right">
+          <i class="pi pi-chevron-right"></i>
+        </button>
+      }
+    </div>
+  }
+</div>
+
+@if (isSticky()) {
+  <div [style.height.px]="headerHeight" class="w-full"></div>
+}

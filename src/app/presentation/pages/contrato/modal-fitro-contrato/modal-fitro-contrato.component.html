@@ -1,0 +1,65 @@
+<div class="modal-header">
+  <h4 class="modal-title">Filtrar Contrato</h4>
+  <button type="button" class="table-action" aria-label="Fechar" (click)="modalRef.hide()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="form" class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+    <div class="field sm:col-span-2">
+      <label class="field-label">Cliente</label>
+      <p-select
+        formControlName="pessoaID"
+        [options]="listClienteContrato"
+        optionValue="codigo"
+        optionLabel="descricao"
+        [showClear]="true"
+        [filter]="true"
+        appendTo="body"
+        placeholder="Selecione o nome do Cliente"
+      />
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="dataInicioContrato">Data Início Contrato</label>
+      <input id="dataInicioContrato" pInputText type="date" formControlName="dataInicioContrato" />
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="dataFimContrato">Data Final Contrato</label>
+      <input id="dataFimContrato" pInputText type="date" formControlName="dataFimContrato" />
+    </div>
+
+    <div class="field sm:col-span-2">
+      <label class="field-label">Empresa Responsável pelo contrato</label>
+      <p-select
+        formControlName="empresaPessoaID"
+        [options]="listEmpresaContrato"
+        optionValue="codigo"
+        optionLabel="descricao"
+        [showClear]="true"
+        [filter]="true"
+        appendTo="body"
+        placeholder="Selecione a empresa Responsável"
+      />
+    </div>
+
+    <div class="field sm:col-span-2">
+      <span class="field-label">Situação</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaSituacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="situacao" [value]="item.codigo" [inputId]="'filtro-sit-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer !justify-between">
+  <p-button label="Limpar" icon="fas fa-trash" severity="secondary" [outlined]="true" (onClick)="limparFiltro()" />
+  <p-button label="Filtrar" icon="fas fa-search" (onClick)="aplicarFiltro()" />
+</div>

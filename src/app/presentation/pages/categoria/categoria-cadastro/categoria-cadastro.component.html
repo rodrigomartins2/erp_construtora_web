@@ -1,0 +1,62 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="form-grid">
+    <div class="field md:col-span-3">
+      <label class="field-label">Categoria Principal</label>
+      <app-autocomplete
+        formControlName="categoriaPrincipalID"
+        [data]="listCategoriaPrincipal"
+        searchKeyword="descricao"
+        placeholder="Digite a categoria"
+        [invalid]="f.categoriaPrincipalID.invalid && (f.categoriaPrincipalID.touched || f.categoriaPrincipalID.dirty)"
+      />
+      @if (f.categoriaPrincipalID.invalid && (f.categoriaPrincipalID.touched || f.categoriaPrincipalID.dirty)) {
+        <small class="field-error">Digite a categoria principal!</small>
+      }
+    </div>
+
+    <div class="field md:col-span-4">
+      <label class="field-label" for="descricao">Descrição</label>
+      <input
+        id="descricao"
+        pInputText
+        type="text"
+        formControlName="descricao"
+        placeholder="Informe a descrição"
+        [invalid]="f.descricao.invalid && (f.descricao.touched || f.descricao.dirty)"
+      />
+      @if (f.descricao.invalid && (f.descricao.touched || f.descricao.dirty)) {
+        <small class="field-error">Digite a descrição</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3">
+      <span class="field-label">Tipo Categoria</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaTipo; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton
+              formControlName="tipo"
+              [value]="item.codigo"
+              [inputId]="'tipo-' + item.codigo"
+              [invalid]="f.tipo.invalid && (f.tipo.touched || f.tipo.dirty)"
+            />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+      @if (f.tipo.invalid && (f.tipo.touched || f.tipo.dirty)) {
+        <small class="field-error">Selecione o tipo</small>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

@@ -1,0 +1,213 @@
+<div class="flex flex-col gap-4 p-4">
+  @if (sortableColumns.length > 0) {
+    <div
+      class="flex items-center gap-2 rounded-lg border border-slate-200 bg-(--app-body-background) p-2.5"
+    >
+      <label
+        class="text-xs font-semibold uppercase text-slate-500"
+        for="generics-table-mobile-sort"
+      >
+        Ordenar
+      </label>
+      <select
+        id="generics-table-mobile-sort"
+        class="min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 outline-none focus:border-primary-500"
+        [value]="sortField || ''"
+        (change)="sortFieldChange.emit($any($event.target).value)"
+      >
+        <option value="">Sem ordenação</option>
+        @for (column of sortableColumns; track trackByColumn($index, column)) {
+          <option [value]="column.field">{{ column.header }}</option>
+        }
+      </select>
+
+      <p-button
+        [icon]="sortOrder === 1 ? 'pi pi-sort-amount-down-alt' : 'pi pi-sort-amount-up-alt'"
+        [outlined]="true"
+        [rounded]="true"
+        severity="secondary"
+        ariaLabel="Alternar direção da ordenação"
+        (onClick)="sortOrderToggle.emit()"
+      />
+    </div>
+  }
+
+  @if (loading) {
+    @for (_ of [].constructor(rows); track $index) {
+      <article class="rounded-lg border border-slate-200 bg-white p-3.5 shadow-sm">
+        <div class="flex items-start justify-between gap-2">
+          <p-skeleton width="55%" height="0.9rem" />
+
+          @if (hasActions) {
+            <div class="flex shrink-0 items-center gap-1.5">
+              @for (_ of actions; track trackByIndex($index)) {
+                <p-skeleton shape="circle" size="1.7rem" />
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mt-2.5 grid grid-cols-1 gap-2.5">
+          @for (column of columns; track trackByColumn($index, column)) {
+            <div class="flex items-center justify-between gap-2 border-t border-slate-100 pt-2.5">
+              <p-skeleton width="30%" height="0.8rem" />
+              <p-skeleton width="45%" height="0.8rem" />
+            </div>
+          }
+        </div>
+      </article>
+    }
+  } @else if (mobilePageData.length > 0) {
+    @for (row of mobilePageData; track trackByIndex($index)) {
+      <article class="rounded-lg border border-slate-200 bg-white p-3.5 shadow-sm">
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="min-w-0 flex-1 truncate text-sm font-semibold text-slate-900">
+            {{ getCardTitle(row) }}
+          </h3>
+
+          @if (hasActions) {
+            <div class="flex shrink-0 items-center gap-1.5">
+              @for (action of getVisibleActions(row); track trackByIndex($index)) {
+                <p-button
+                  [icon]="action.icon"
+                  [outlined]="action.outlined ?? true"
+                  [rounded]="true"
+                  [severity]="action.severity || 'secondary'"
+                  [disabled]="isActionDisabled(action, row)"
+                  [styleClass]="getActionButtonClass(action)"
+                  [ariaLabel]="action.ariaLabel || action.tooltip || action.label || 'Ação'"
+                  (onClick)="runAction($event, action, row)"
+                />
+              }
+            </div>
+          }
+        </div>
+
+        <dl class="mt-2.5 grid grid-cols-1 gap-2.5">
+          @for (column of columns; track trackByColumn($index, column)) {
+            <div class="flex items-start justify-between gap-2 border-t border-slate-100 pt-2.5">
+              <dt class="text-xs font-medium text-slate-500">{{ column.header }}</dt>
+              <dd class="min-w-0 text-right text-sm text-[#566166]">
+                @if (column.template) {
+                  <ng-container
+                    *ngTemplateOutlet="
+                      column.template;
+                      context: { $implicit: row, field: column.field }
+                    "
+                  />
+                } @else if (column.type === 'badge') {
+                  <span
+                    class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
+                    [ngClass]="[column.badgeStyleClass || '', getBadgeClass(row, column)]"
+                  >
+                    {{ getDisplayValue(row, column) }}
+                  </span>
+                } @else {
+                  <span class="wrap-break-word">{{ getDisplayValue(row, column) }}</span>
+                }
+              </dd>
+            </div>
+          }
+        </dl>
+      </article>
+    }
+  } @else {
+    <div
+      class="rounded-lg border border-slate-200 bg-(--app-body-background) p-4 text-center text-sm text-slate-500"
+    >
+      {{ emptyMessage }}
+    </div>
+  }
+
+  @if (showPaginator) {
+    <div class="rounded-lg border border-slate-200 bg-white px-2 py-2">
+      <div class="mb-1.5 flex items-center justify-between gap-1.5">
+        @if (showCurrentPageReport) {
+          <div class="min-w-0 text-left text-xs text-slate-500">
+            {{ currentPageReport }}
+          </div>
+        }
+
+        <select
+          class="ml-auto w-auto rounded-md border border-slate-300 bg-white px-1.5 py-0.5 text-xs text-slate-700 outline-none focus:border-primary-500"
+          [value]="rows"
+          (change)="onRowsPerPageChange($any($event.target).value)"
+        >
+          @for (option of rowsPerPageOptions; track trackByIndex($index)) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </div>
+
+      <div
+        class="generics-table-mobile-pager flex w-full items-center justify-between gap-2 whitespace-nowrap"
+      >
+        <p-button
+          icon="pi pi-angle-double-left"
+          [outlined]="true"
+          [rounded]="true"
+          severity="secondary"
+          [disabled]="!canGoPrev"
+          ariaLabel="Primeira página"
+          (onClick)="goToFirstPage()"
+        />
+
+        <p-button
+          icon="pi pi-angle-left"
+          [outlined]="true"
+          [rounded]="true"
+          severity="secondary"
+          [disabled]="!canGoPrev"
+          ariaLabel="Página anterior"
+          (onClick)="goToPreviousPage()"
+        />
+
+        <div class="flex flex-1 items-center justify-center gap-1">
+          @if (showLeadingEllipsis) {
+            <span class="px-1 text-xs text-slate-400">...</span>
+          }
+
+          @for (page of visiblePageNumbers; track page) {
+            <button
+              type="button"
+              class="flex h-6 w-6 items-center justify-center rounded-full border text-xs font-medium"
+              [class.border-primary-500]="page === currentPage"
+              [class.bg-primary-50]="page === currentPage"
+              [class.text-primary-700]="page === currentPage"
+              [class.border-slate-300]="page !== currentPage"
+              [class.bg-white]="page !== currentPage"
+              [class.text-slate-700]="page !== currentPage"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+
+          @if (showTrailingEllipsis) {
+            <span class="px-1 text-xs text-slate-400">...</span>
+          }
+        </div>
+
+        <p-button
+          icon="pi pi-angle-right"
+          [outlined]="true"
+          [rounded]="true"
+          severity="secondary"
+          [disabled]="!canGoNext"
+          ariaLabel="Próxima página"
+          (onClick)="goToNextPage()"
+        />
+
+        <p-button
+          icon="pi pi-angle-double-right"
+          [outlined]="true"
+          [rounded]="true"
+          severity="secondary"
+          [disabled]="!canGoNext"
+          ariaLabel="Última página"
+          (onClick)="goToLastPage()"
+        />
+      </div>
+    </div>
+  }
+</div>

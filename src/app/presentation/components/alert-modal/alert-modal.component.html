@@ -1,0 +1,8 @@
+<div class="flex flex-col items-center gap-3 px-6 py-6 text-center">
+  <i [class]="estilo.icone + ' ' + estilo.cor + ' text-6xl'"></i>
+  @if (titulo) {
+    <h4 class="text-lg font-semibold text-surface-700">{{ titulo }}</h4>
+  }
+  <p class="text-surface-600">{{ mensagem }}</p>
+  <p-button label="OK" icon="fas fa-check" styleClass="mt-2 min-w-28" (onClick)="onClose()" />
+</div>

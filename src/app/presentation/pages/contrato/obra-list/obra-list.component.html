@@ -1,0 +1,166 @@
+<div class="page-card">
+  <app-breakcrumb [titulo]="'Consultar Obras do Contrato Nro. ' + numeroContraroTitulo">
+    <div segundoBotao class="flex flex-wrap items-center gap-2">
+      <p-button label="Inserir Obras" icon="fas fa-pen-square" size="small" severity="secondary" [outlined]="true" (onClick)="inserirCadastroDocumento()" />
+      <p-button label="Consultar Contrato" icon="fas fa-search" size="small" severity="info" [outlined]="true" routerLink="/app/listcontrato" />
+    </div>
+  </app-breakcrumb>
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="obraID">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.obraID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="numeroContrato">
+        <th mat-header-cell *matHeaderCellDef>Nro. Contrato</th>
+        <td mat-cell *matCellDef="let row">{{ row.numeroContrato }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nomeDaObra">
+        <th mat-header-cell *matHeaderCellDef>Obra</th>
+        <td mat-cell *matCellDef="let row">{{ row.nomeDaObra }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nomeResponsavel">
+        <th mat-header-cell *matHeaderCellDef>Responsável</th>
+        <td mat-cell *matCellDef="let row">{{ row.nomeResponsavel }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataInicioObra">
+        <th mat-header-cell *matHeaderCellDef>Dt. Início</th>
+        <td mat-cell *matCellDef="let row">{{ row.dataInicioObra | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataFimObra">
+        <th mat-header-cell *matHeaderCellDef>Dt. Final</th>
+        <td mat-cell *matCellDef="let row">{{ row.dataFimObra | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef>Situação</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="whitespace-nowrap text-right">
+          <a (click)="onLancarInsumosObra(row)" class="table-action" pTooltip="Insumos da Obra" tooltipPosition="top">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+          </a>
+          <a (click)="editarCadastroDocumento(row.obraID)" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>
+
+<ng-template #templateModalForm>
+  <div class="modal-header">
+    <h4 class="modal-title">Inserir Obra</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalService.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field md:col-span-12">
+          <label class="field-label" for="nomeDaObra">Nome da Obra</label>
+          <input
+            id="nomeDaObra"
+            pInputText
+            type="text"
+            formControlName="nomeDaObra"
+            [invalid]="f.nomeDaObra.invalid && (f.nomeDaObra.touched || f.nomeDaObra.dirty)"
+          />
+          @if (f.nomeDaObra.invalid && (f.nomeDaObra.touched || f.nomeDaObra.dirty)) {
+            <small class="field-error">Informe o nome da Obra</small>
+          }
+        </div>
+
+        <div class="field md:col-span-12">
+          <label class="field-label">Responsável pela obra</label>
+          <app-autocomplete
+            formControlName="pessoaResponsavelID"
+            [data]="listPessoa"
+            searchKeyword="descricao"
+            placeholder="Digite o nome do responsável"
+            [invalid]="f.pessoaResponsavelID.invalid && (f.pessoaResponsavelID.touched || f.pessoaResponsavelID.dirty)"
+          />
+          @if (f.pessoaResponsavelID.invalid && (f.pessoaResponsavelID.touched || f.pessoaResponsavelID.dirty)) {
+            <small class="field-error">Informe o Responsável pela obra</small>
+          }
+        </div>
+
+        <div class="field md:col-span-6">
+          <label class="field-label" for="dataInicioObra">Dt. Início</label>
+          <input
+            id="dataInicioObra"
+            pInputText
+            type="date"
+            formControlName="dataInicioObra"
+            [invalid]="f.dataInicioObra.invalid && (f.dataInicioObra.touched || f.dataInicioObra.dirty)"
+          />
+          @if (f.dataInicioObra.invalid && (f.dataInicioObra.touched || f.dataInicioObra.dirty)) {
+            <small class="field-error">Informe a data de início da obra</small>
+          }
+        </div>
+
+        <div class="field md:col-span-6">
+          <label class="field-label" for="dataFimObra">Dt. Final</label>
+          <input
+            id="dataFimObra"
+            pInputText
+            type="date"
+            formControlName="dataFimObra"
+            [invalid]="f.dataFimObra.invalid && (f.dataFimObra.touched || f.dataFimObra.dirty)"
+          />
+          @if (f.dataFimObra.invalid && (f.dataFimObra.touched || f.dataFimObra.dirty)) {
+            <small class="field-error">Informe a data final da obra</small>
+          }
+        </div>
+
+        <div class="field md:col-span-12">
+          <label class="field-label" for="obraObservacao">Observação</label>
+          <textarea id="obraObservacao" pTextarea formControlName="observacao" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+
+    @if (funcionalidade != 3) {
+      <div class="modal-footer">
+        <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+        <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+      </div>
+    }
+  </form>
+</ng-template>
+
+<ng-template #templateModalInsumosObra>
+  <div class="modal-header">
+    <h4 class="modal-title">Insumos da Obra</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalService.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-modal-cad-material-obra [codigoObra]="obraID"></app-modal-cad-material-obra>
+  </div>
+</ng-template>

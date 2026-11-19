@@ -1,0 +1,90 @@
+<div class="page-card">
+  <app-breakcrumb>
+    <div segundoBotao class="flex items-center gap-1">
+      <a class="table-action text-lg" pTooltip="Filtrar Dados" tooltipPosition="left" (click)="abrirFiltro()">
+        <i class="fas fa-filter"></i>
+      </a>
+      <p-button
+        label="Entrada"
+        icon="fas fa-sort-amount-down"
+        size="small"
+        severity="success"
+        [outlined]="true"
+        routerLink="entradaestoque/"
+        pTooltip="Entrada do Estoque"
+        tooltipPosition="bottom"
+      />
+      <p-button
+        label="Saída"
+        icon="fas fa-sort-amount-up"
+        size="small"
+        severity="danger"
+        [outlined]="true"
+        routerLink="saidaestoque/"
+        pTooltip="Saída do Estoque"
+        tooltipPosition="bottom"
+      />
+    </div>
+  </app-breakcrumb>
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="entradaSaidaID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.entradaSaidaID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="numeroNota">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro. Nota</th>
+        <td mat-cell *matCellDef="let row">{{ row.numeroNota }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Operação</th>
+        <td mat-cell *matCellDef="let row">{{ row.operacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="clienteFornecedor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente/Fornecedor</th>
+        <td mat-cell *matCellDef="let row">{{ row.clienteFornecedor }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataMovimento">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Dt. Movimento</th>
+        <td mat-cell *matCellDef="let row">{{ row.dataMovimento | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="movimentacaoRealizada">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Mov. Estoque</th>
+        <td mat-cell *matCellDef="let row">{{ row.movimentacaoRealizada == 'True' ? 'Sim' : 'Não' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="valorTotal">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+        <td mat-cell *matCellDef="let row">{{ row.valorTotal | currency: 'BRL' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a (click)="onVisualizar(row)" class="table-action" pTooltip="Detalhes da Nota" tooltipPosition="left">
+            <i class="fa fa-th-list" aria-hidden="true"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

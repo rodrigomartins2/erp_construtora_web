@@ -1,0 +1,82 @@
+<div class="page-card">
+  <div class="page-card-header">
+    <button type="button" class="page-card-title" (click)="filtroAberto = !filtroAberto">
+      <i class="fas fa-filter text-surface-400"></i> Filtro
+      <i class="fas fa-chevron-down text-xs text-surface-400 transition-transform" [class.rotate-180]="filtroAberto"></i>
+    </button>
+    <a routerLink="pessoacadastro/" class="text-sm text-surface-600 hover:text-primary">
+      <i class="fas fa-pen-square"></i> Novo Registro
+    </a>
+  </div>
+
+  @if (filtroAberto) {
+    <form [formGroup]="myform" (ngSubmit)="reloadTable()" class="mb-4 flex flex-wrap items-end gap-3">
+      <div class="field w-full sm:w-80">
+        <label class="field-label" for="filtroNome">Nome ou Nome Fantasia</label>
+        <input id="filtroNome" pInputText type="text" formControlName="nome" />
+      </div>
+      <div class="field w-full sm:w-52">
+        <label class="field-label" for="filtroCpfCnpj">CPF/CNPJ</label>
+        <input id="filtroCpfCnpj" pInputText type="text" formControlName="cPFCNPJ" mask="000.000.000-00||00.000.000/0000-00" inputmode="numeric" />
+      </div>
+      <p-button type="submit" label="Buscar" icon="fas fa-search" [outlined]="true" />
+      <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+    </form>
+  }
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="pessoaID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.pessoaID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cpfcnpj">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>CPF/CNPJ</th>
+        <td mat-cell *matCellDef="let row">{{ row.cpfcnpj }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let row">{{ row.nome }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nomeFantasia">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome Fantasia</th>
+        <td mat-cell *matCellDef="let row">{{ row.nomeFantasia }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="telefone">
+        <th mat-header-cell *matHeaderCellDef>Telefone</th>
+        <td mat-cell *matCellDef="let row">{{ row.telefone }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nomeDoMunicipio">
+        <th mat-header-cell *matHeaderCellDef>Cidade</th>
+        <td mat-cell *matCellDef="let row">{{ row.nomeDoMunicipio }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a [routerLink]="['pessoacadastro/visualizar', row.pessoaID, 3]" class="table-action" pTooltip="Visualizar / Editar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

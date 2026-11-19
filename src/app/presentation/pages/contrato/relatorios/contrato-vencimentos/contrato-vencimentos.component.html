@@ -1,0 +1,35 @@
+<div class="page-card">
+  <form [formGroup]="myform" (ngSubmit)="onRelatorio()" class="form-grid">
+    <div class="field md:col-span-2">
+      <label class="field-label" for="dataInicio">Data Início Venc.</label>
+      <input id="dataInicio" pInputText type="date" formControlName="dataInicio" />
+    </div>
+
+    <div class="field md:col-span-2">
+      <label class="field-label" for="dataFim">Data Fim Venc.</label>
+      <input id="dataFim" pInputText type="date" formControlName="dataFim" />
+    </div>
+
+    <div class="field md:col-span-5">
+      <label class="field-label">Empresa Responsável pelo contrato</label>
+      <p-select formControlName="empresaID" placeholder="Selecione Empresa" [options]="listEmpresaPessoa" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+    </div>
+
+    <div class="field md:col-span-3">
+      <span class="field-label">Situação</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaSituacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="situacao" [value]="item.codigo" [inputId]="'venc-sit-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 md:col-span-12">
+      <p-button type="submit" label="Gerar" icon="fas fa-file-pdf" [outlined]="true" />
+      <p-button label="Limpar" icon="fas fa-eraser" severity="secondary" [outlined]="true" (onClick)="onResetCampos()" />
+    </div>
+  </form>
+</div>

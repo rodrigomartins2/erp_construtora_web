@@ -1,0 +1,51 @@
+.app-splash-screen {
+    background: rgb(221, 218, 218, 1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 10336;  
+  }
+  
+  .app-label {
+    margin-top: 0px;
+    color: #fff;
+    font-size: 2.5em;
+    font-family: "Pacifico", cursive;
+  }
+  
+  .app-splash-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .app-logo {  
+    /* background-image: url("/../../assets/img/Lontano_Icone.png");
+    background-repeat: no-repeat; */
+    max-width: 100%;
+    background-position: center;
+    background-size: contain;
+    width: 120px;
+    height: 120px;
+    z-index: 10339;  
+  }
+  
+  .app-loader {
+    /* background-image: url("/../../assets/img/three-dots.svg");
+    background-repeat: no-repeat; */
+    max-width: 100%;
+    background-position: center;
+    background-size: contain;
+    width: 80px;
+    height: 80px;
+    margin-top: 0px;
+  }
+  

@@ -1,0 +1,58 @@
+<div class="page-card">
+  <app-breakcrumb>
+    <div segundoBotao class="flex items-center gap-1">
+      <a routerLink="unidademedidacadastro/" class="table-action text-lg" pTooltip="Novo Registro" tooltipPosition="left">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
+  </app-breakcrumb>
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="unidadeMedidaID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.unidadeMedidaID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+        <td mat-cell *matCellDef="let row">{{ row.descricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="abreviacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Abreviação</th>
+        <td mat-cell *matCellDef="let row">{{ row.abreviacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a [routerLink]="['unidademedidacadastro/editar', row.unidadeMedidaID, 2]" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a (click)="onExcluir(row)" class="table-action table-action-danger" [pTooltip]="row.status == 'Ativo' ? 'Inativar' : 'Ativar'" tooltipPosition="top">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

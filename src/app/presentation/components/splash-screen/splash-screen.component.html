@@ -1,0 +1,11 @@
+<div class="app-splash-screen" [ngStyle]="{ 
+    left: windowWidth, 
+    opacity: opacityChange,
+    transition: splashTransition
+  }" *ngIf="showSplash">
+  <div class="app-splash-inner">
+      <div class="app-logo" style="background-image: url('assets/img/logoConstrutora.png'); background-repeat: no-repeat;"></div>
+      <!-- <div class="app-label">Splashy</div> -->
+      <div class="app-loader"style="background-image: url('assets/img/three-dots.svg'); background-repeat: no-repeat;"></div>
+  </div>
+</div>

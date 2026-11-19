@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host ::ng-deep .p-select {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 34px;
+  font-size: 0.8125rem;
+  line-height: 1rem;
+}
+
+:host ::ng-deep .p-select-label {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding-block: 0.35rem;
+  padding-inline: 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1rem;
+}
+
+:host ::ng-deep .p-select-dropdown {
+  align-self: stretch;
+  width: 2rem;
+}
+
+:host ::ng-deep .p-select.ng-invalid.ng-touched.ng-dirty {
+  border-color: var(--p-inputtext-invalid-border-color, #ef4444) !important;
+}
+
+:host ::ng-deep .p-select.ng-invalid.ng-touched.ng-dirty.p-focus {
+  border-color: var(--p-inputtext-invalid-border-color, #ef4444) !important;
+  box-shadow: 0 0 0 1px var(--p-inputtext-invalid-border-color, #ef4444) !important;
+}

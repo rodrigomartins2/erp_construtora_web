@@ -1,0 +1,251 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <!-- Dados gerais -->
+  <div class="form-grid">
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label" for="cPFCNPJ">CPF/CNPJ</label>
+      <input
+        id="cPFCNPJ"
+        pInputText
+        type="text"
+        inputmode="numeric"
+        formControlName="cPFCNPJ"
+        #cPFCNPJ
+        placeholder="Informe o CPF ou CNPJ"
+        mask="000.000.000-00||00.000.000/0000-00"
+        (blur)="validaTipoPessoa(cPFCNPJ.value)"
+        [invalid]="f.cPFCNPJ.invalid && (f.cPFCNPJ.touched || f.cPFCNPJ.dirty)"
+      />
+      @if (f.cPFCNPJ.invalid && (f.cPFCNPJ.touched || f.cPFCNPJ.dirty)) {
+        <small class="field-error">Digite o CPF ou CNPJ</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label" for="rGIEestadual">{{ tipoPessoa == 'PF' ? 'RG' : 'Inscr. Estadual' }}</label>
+      <input
+        id="rGIEestadual"
+        pInputText
+        type="tel"
+        formControlName="rGIEestadual"
+        [placeholder]="tipoPessoa == 'PF' ? 'Informe o RG' : 'Informe a inscrição Estadual'"
+      />
+    </div>
+
+    <div class="field md:col-span-6 lg:col-span-4">
+      <label class="field-label" for="nome">Nome</label>
+      <input
+        id="nome"
+        pInputText
+        type="text"
+        formControlName="nome"
+        placeholder="Informe o nome"
+        [invalid]="f.nome.invalid && (f.nome.touched || f.nome.dirty)"
+      />
+      @if (f.nome.invalid && (f.nome.touched || f.nome.dirty)) {
+        <small class="field-error">Digite o nome</small>
+      }
+    </div>
+
+    @if (tipoPessoa == 'PJ') {
+      <div class="field md:col-span-6 lg:col-span-4">
+        <label class="field-label" for="nomeFantasia">Nome Fantasia</label>
+        <input id="nomeFantasia" pInputText type="text" formControlName="nomeFantasia" placeholder="Informe o nome de fantasia" />
+      </div>
+    }
+
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label" for="dataNascimento">{{ tipoPessoa == 'PF' ? 'Data Nascimento' : 'Data Fund. Empresa' }}</label>
+      <input id="dataNascimento" pInputText type="date" formControlName="dataNascimento" />
+    </div>
+
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label" for="telefone">Telefone</label>
+      <input
+        id="telefone"
+        pInputText
+        type="tel"
+        inputmode="numeric"
+        formControlName="telefone"
+        placeholder="Informe o telefone"
+        mask="(00)0000-0000||(00)00000-0000"
+        [dropSpecialCharacters]="false"
+      />
+    </div>
+
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label" for="celular">Celular</label>
+      <input
+        id="celular"
+        pInputText
+        type="tel"
+        inputmode="numeric"
+        formControlName="celular"
+        placeholder="Informe o celular"
+        mask="(00)0000-0000||(00)00000-0000"
+        [dropSpecialCharacters]="false"
+        [invalid]="f.celular.invalid && (f.celular.touched || f.celular.dirty)"
+      />
+      @if (f.celular.invalid && (f.celular.touched || f.celular.dirty)) {
+        <small class="field-error">Digite o Celular</small>
+      }
+    </div>
+
+    <div class="field md:col-span-6 lg:col-span-4">
+      <label class="field-label" for="email">Email</label>
+      <input
+        id="email"
+        pInputText
+        type="email"
+        formControlName="email"
+        placeholder="Informe o Email"
+        [invalid]="f.email.invalid && (f.email.touched || f.email.dirty)"
+      />
+      @if (f.email.invalid && (f.email.touched || f.email.dirty)) {
+        <small class="field-error">Digite o Email</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label">Tipo de Pessoa</label>
+      <p-select
+        formControlName="subTipoPessoa"
+        placeholder="Selecione o tipo"
+        [options]="listaSubTipoPessoa"
+        optionValue="codigo"
+        optionLabel="descricao"
+        [showClear]="true"
+        appendTo="body"
+        [invalid]="f.subTipoPessoa.invalid && (f.subTipoPessoa.touched || f.subTipoPessoa.dirty)"
+      />
+      @if (f.subTipoPessoa.invalid && (f.subTipoPessoa.touched || f.subTipoPessoa.dirty)) {
+        <small class="field-error">Selecione o Tipo de Pessoa</small>
+      }
+    </div>
+  </div>
+
+  <!-- Endereço -->
+  <h3 class="mb-3 mt-6 border-b border-surface-200 pb-2 text-sm font-semibold uppercase text-surface-500">Endereço</h3>
+  <div class="form-grid">
+    <div class="field md:col-span-3 lg:col-span-2">
+      <label class="field-label" for="enderecoCep">Cep</label>
+      <input
+        id="enderecoCep"
+        pInputText
+        type="tel"
+        inputmode="numeric"
+        formControlName="enderecoCep"
+        #enderecoCep
+        (blur)="onBuscaEndereco(enderecoCep.value)"
+        placeholder="Informe o Cep"
+        mask="00000-000"
+        [invalid]="f.enderecoCep.invalid && (f.enderecoCep.touched || f.enderecoCep.dirty)"
+      />
+      @if (f.enderecoCep.invalid && (f.enderecoCep.touched || f.enderecoCep.dirty)) {
+        <small class="field-error">Digite o Cep</small>
+      }
+    </div>
+
+    <div class="field md:col-span-9 lg:col-span-5">
+      <label class="field-label" for="enderecoRua">Endereço</label>
+      <input
+        id="enderecoRua"
+        pInputText
+        type="text"
+        formControlName="enderecoRua"
+        placeholder="Informe o Endereço"
+        [invalid]="f.enderecoRua.invalid && (f.enderecoRua.touched || f.enderecoRua.dirty)"
+      />
+      @if (f.enderecoRua.invalid && (f.enderecoRua.touched || f.enderecoRua.dirty)) {
+        <small class="field-error">Digite o Endereço</small>
+      }
+    </div>
+
+    <div class="field md:col-span-3 lg:col-span-1">
+      <label class="field-label" for="enderecoNumero">Número</label>
+      <input
+        id="enderecoNumero"
+        pInputText
+        type="text"
+        inputmode="numeric"
+        formControlName="enderecoNumero"
+        placeholder="Nº"
+        [invalid]="f.enderecoNumero.invalid && (f.enderecoNumero.touched || f.enderecoNumero.dirty)"
+      />
+      @if (f.enderecoNumero.invalid && (f.enderecoNumero.touched || f.enderecoNumero.dirty)) {
+        <small class="field-error">Digite o Número</small>
+      }
+    </div>
+
+    <div class="field md:col-span-9 lg:col-span-4">
+      <label class="field-label" for="enderecoBairro">Bairro</label>
+      <input
+        id="enderecoBairro"
+        pInputText
+        type="text"
+        formControlName="enderecoBairro"
+        placeholder="Informe o Bairro"
+        [invalid]="f.enderecoBairro.invalid && (f.enderecoBairro.touched || f.enderecoBairro.dirty)"
+      />
+      @if (f.enderecoBairro.invalid && (f.enderecoBairro.touched || f.enderecoBairro.dirty)) {
+        <small class="field-error">Digite o Bairro</small>
+      }
+    </div>
+
+    <div class="field md:col-span-4 lg:col-span-3">
+      <label class="field-label">UF</label>
+      <p-select
+        formControlName="estadoID"
+        placeholder="Selecione a UF"
+        [options]="listEstados"
+        optionValue="estadoID"
+        optionLabel="nomeDaUF"
+        [showClear]="true"
+        [filter]="true"
+        appendTo="body"
+        (onChange)="onMunicipios($event.value)"
+        [invalid]="f.estadoID.invalid && (f.estadoID.touched || f.estadoID.dirty)"
+      />
+      @if (f.estadoID.invalid && (f.estadoID.touched || f.estadoID.dirty)) {
+        <small class="field-error">Digite a UF</small>
+      }
+    </div>
+
+    <div class="field md:col-span-8 lg:col-span-4">
+      <label class="field-label">Cidade</label>
+      <p-select
+        formControlName="enderecoMunicipioID"
+        placeholder="Selecione a Cidade"
+        [options]="listMunicipios"
+        optionValue="municipioID"
+        optionLabel="nomeDoMunicipio"
+        [showClear]="true"
+        [filter]="true"
+        appendTo="body"
+        [invalid]="f.enderecoMunicipioID.invalid && (f.enderecoMunicipioID.touched || f.enderecoMunicipioID.dirty)"
+      />
+      @if (f.enderecoMunicipioID.invalid && (f.enderecoMunicipioID.touched || f.enderecoMunicipioID.dirty)) {
+        <small class="field-error">Digite a Cidade</small>
+      }
+    </div>
+
+    <div class="field md:col-span-12 lg:col-span-5">
+      <label class="field-label" for="enderecoComplemento">Complemento</label>
+      <input id="enderecoComplemento" pInputText type="text" formControlName="enderecoComplemento" placeholder="Informe o Complemento" />
+    </div>
+
+    <div class="field md:col-span-12">
+      <label class="field-label" for="observacao">Observação</label>
+      <textarea id="observacao" pTextarea formControlName="observacao" placeholder="Informe a observação" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

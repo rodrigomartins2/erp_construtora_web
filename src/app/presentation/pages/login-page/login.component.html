@@ -1,0 +1,345 @@
+<main class="login-page relative flex min-h-screen w-full flex-col items-stretch justify-between overflow-hidden bg-[#044ba6] lg:flex-row">
+  <!-- Fundo: foto da obra ao pôr do sol + gradientes azuis -->
+  <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    @if (fundoDisponivel) {
+      <img
+        src="assets/img/login-construcao.webp"
+        alt=""
+        class="absolute bottom-0 left-0 h-full w-full object-cover object-bottom lg:w-[60%]"
+        (error)="fundoDisponivel = false"
+      />
+    }
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-transparent via-[#053787]/50 to-[#022763]/90 lg:bg-gradient-to-r lg:from-transparent lg:via-[#043e94]/75 lg:to-[#042866]"
+    ></div>
+    <div class="absolute inset-0 bg-[#022b6c]/30 mix-blend-multiply"></div>
+  </div>
+
+  <!-- Divisor em curva com brilho -->
+  <div class="pointer-events-none absolute inset-y-0 right-0 left-[34%] z-10 hidden h-full w-[70%] lg:block">
+    <svg class="h-full w-full" fill="none" preserveAspectRatio="none" viewBox="0 0 850 1000" aria-hidden="true">
+      <defs>
+        <linearGradient id="loginMainRightGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#054ba8" />
+          <stop offset="40%" stop-color="#043c8d" />
+          <stop offset="100%" stop-color="#022869" />
+        </linearGradient>
+        <linearGradient id="loginGlowCurve" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#00c5ff" stop-opacity="0.95" />
+          <stop offset="50%" stop-color="#0091ff" stop-opacity="0.8" />
+          <stop offset="100%" stop-color="#004ca8" stop-opacity="0.2" />
+        </linearGradient>
+        <linearGradient id="loginSubWaveGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#0088ff" stop-opacity="0.5" />
+          <stop offset="100%" stop-color="#043b8c" stop-opacity="0.1" />
+        </linearGradient>
+      </defs>
+      <path d="M 210,0 C 90,260 20,530 190,1000 L 850,1000 L 850,0 Z" fill="url(#loginSubWaveGrad)" />
+      <path d="M 270,-10 C 140,290 70,590 240,1010 L 850,1010 L 850,-10 Z" fill="url(#loginMainRightGrad)" />
+      <path d="M 270,-10 C 140,290 70,590 240,1010" fill="none" stroke="url(#loginGlowCurve)" stroke-linecap="round" stroke-width="6" />
+    </svg>
+  </div>
+
+  <!-- Coluna esquerda: apresentação e empresas do grupo -->
+  <section aria-label="Apresentação institucional" class="relative z-20 flex max-w-3xl flex-1 flex-col justify-between px-6 pt-12 pb-10 sm:px-12 lg:px-16">
+    <div class="space-y-4 pt-2">
+      <div class="mb-6 h-2 w-16 rounded-full bg-gradient-to-r from-[#00d0ff] to-[#0088ff] shadow-sm"></div>
+      <h1 class="text-3xl leading-[1.14] font-extrabold tracking-tight text-white sm:text-4xl lg:text-[44px]">
+        Sistema de Gestão<br />
+        Administrativa
+      </h1>
+      <p class="pt-1 text-base font-normal tracking-wide text-blue-100/90 sm:text-lg">Gestão integrada das empresas do grupo</p>
+    </div>
+
+    <div class="h-16 sm:h-48 lg:h-56"></div>
+
+    <div class="hidden pb-2 sm:block">
+      <div class="grid max-w-lg grid-cols-3 gap-3.5 sm:gap-4">
+        <div class="empresa-card">
+          <div class="flex h-12 w-full items-center justify-center pt-0.5">
+            <img alt="Construtora B&C" class="max-h-11 max-w-[85%] object-contain" src="assets/img/logoConstrutora.png" />
+          </div>
+          <div class="mt-auto">
+            <p class="text-[12px] leading-tight font-bold text-[#102348]">Construtora</p>
+            <p class="text-[11px] leading-tight font-semibold text-[#102348]">B&C Ltda.</p>
+          </div>
+        </div>
+
+        <div class="empresa-card">
+          <div class="flex h-12 w-full items-center justify-center pt-1">
+            <img alt="Laser Iluminação" class="max-h-11 max-w-[90%] object-contain" src="assets/img/laser.png" />
+          </div>
+          <div class="mt-auto">
+            <p class="text-[12px] leading-tight font-bold tracking-wider text-[#102348]">LASER</p>
+            <p class="text-[10px] leading-tight font-bold tracking-wide text-[#102348]">ILUMINAÇÃO</p>
+          </div>
+        </div>
+
+        <div class="empresa-card">
+          <div class="flex h-12 w-full items-center justify-center pt-0.5">
+            <svg class="h-9 w-12" fill="none" viewBox="0 0 54 36" aria-hidden="true">
+              <path d="M 6 4 L 17 4 L 27 28 L 22 33 L 1 12 Z" fill="#0d2b56" />
+              <path d="M 27 28 L 37 4 L 48 4 L 33 33 Z" fill="#0b3875" />
+              <path d="M 37 4 L 52 4 L 46 12 L 34 12 Z" fill="#007df0" />
+              <path d="M 40 15 L 50 15 L 45 22 L 36 22 Z" fill="#00b4f0" />
+            </svg>
+          </div>
+          <div class="mt-auto">
+            <p class="text-[10.5px] leading-tight font-bold tracking-tight text-[#102348] uppercase">Valberto</p>
+            <p class="text-[10px] leading-tight font-bold tracking-tight text-[#102348] uppercase">Costa Filho</p>
+            <p class="text-[9px] leading-tight font-semibold text-[#102348]">Ltda.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coluna direita: cartão de login -->
+  <section aria-label="Acesso ao sistema" class="relative z-20 flex flex-1 items-center justify-center px-4 py-10 sm:px-8 lg:px-14 lg:py-12">
+    <div class="flex w-full max-w-[480px] flex-col rounded-2xl border border-white/60 bg-white p-8 shadow-[0_20px_50px_rgba(8,43,99,0.3)] sm:p-10">
+      <div class="mb-6 flex flex-col items-center text-center">
+        <div class="mb-3.5 flex items-center justify-center">
+          <svg class="h-14 w-14" fill="none" viewBox="0 0 56 56" aria-hidden="true">
+            <rect fill="#087CF5" height="27" rx="2" width="13" x="7" y="21" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="10.5" y="25" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="14.5" y="25" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="10.5" y="31" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="14.5" y="31" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="10.5" y="37" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="14.5" y="37" />
+            <rect fill="#0060cb" height="39" rx="2.5" width="16" x="22" y="9" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="25.5" y="14" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="30.5" y="14" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="25.5" y="20" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="30.5" y="20" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="25.5" y="26" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="30.5" y="26" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="25.5" y="32" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="30.5" y="32" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="25.5" y="38" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="30.5" y="38" />
+            <rect fill="#007df0" height="22" rx="2" width="9" x="40" y="26" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="43" y="31" />
+            <rect fill="#fff" height="3" rx="0.5" width="2.5" x="43" y="37" />
+            <circle cx="43" cy="22" fill="#00c2ff" r="1.5" />
+          </svg>
+        </div>
+        <h2 class="mb-1 text-xl font-bold tracking-tight text-[#102348] sm:text-[22px]">Sistema de Gestão Administrativa</h2>
+        <p class="text-sm font-normal text-slate-500">Acesse sua conta para continuar</p>
+      </div>
+
+      <form
+        [formGroup]="formLogin"
+        (submit)="onSubmit()"
+        (keydown.enter)="$event.preventDefault()"
+        (keydown.shift.enter)="$event.preventDefault()"
+        class="space-y-4"
+      >
+        <!-- E-mail -->
+        <div class="space-y-1.5">
+          <label class="login-label" for="loginEmail">
+            <i class="pi pi-envelope mr-1.5 text-sm"></i>
+            E-mail
+          </label>
+          <input
+            id="loginEmail"
+            type="email"
+            #email
+            formControlName="email"
+            placeholder="Informe seu e-mail"
+            autocomplete="username"
+            class="login-input"
+            [class.login-input--invalid]="fl['email'].invalid && fl['email'].touched"
+            (blur)="onVerificaUsuario(email.value)"
+          />
+        </div>
+
+        <!-- Senha -->
+        <div class="space-y-1.5">
+          <label class="login-label" for="loginSenha">
+            <i class="pi pi-lock mr-1.5 text-sm"></i>
+            Senha
+          </label>
+          <div class="relative flex items-center">
+            <input
+              id="loginSenha"
+              [type]="mostrarSenha ? 'text' : 'password'"
+              formControlName="senha"
+              placeholder="Informe sua senha"
+              autocomplete="current-password"
+              class="login-input pr-10"
+              [class.login-input--invalid]="fl['senha'].invalid && fl['senha'].touched"
+            />
+            <button
+              type="button"
+              class="absolute right-3 text-slate-400 hover:text-slate-600 focus:outline-none"
+              [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'"
+              (click)="mostrarSenha = !mostrarSenha"
+            >
+              <i class="pi text-sm" [class.pi-eye-slash]="!mostrarSenha" [class.pi-eye]="mostrarSenha"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Empresa do grupo -->
+        <div class="space-y-1.5">
+          <label class="login-label" for="loginEmpresa">
+            <i class="pi pi-building mr-1.5 text-sm"></i>
+            Empresa do Grupo
+          </label>
+          <p-select
+            inputId="loginEmpresa"
+            formControlName="empresa"
+            placeholder="Selecione a empresa"
+            [options]="listEmpresaGrupo"
+            optionValue="codigo"
+            optionLabel="descricao"
+            [showClear]="true"
+            appendTo="body"
+            styleClass="login-select w-full"
+            emptyMessage="Informe o e-mail para carregar as empresas"
+            [invalid]="fl['empresa'].invalid && fl['empresa'].touched"
+          />
+        </div>
+
+        @if (mensagem) {
+          <p class="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{{ mensagem }}</p>
+        }
+
+        <div class="pt-2">
+          <button type="submit" class="login-submit">
+            <i class="pi pi-sign-in text-sm"></i>
+            <span>Acessar</span>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between pt-1.5 text-xs">
+          <label class="flex cursor-pointer items-center gap-2 text-slate-700 select-none">
+            <input
+              type="checkbox"
+              class="h-4 w-4 cursor-pointer rounded border-slate-300 accent-[#087CF5]"
+              [checked]="lembrarAcesso"
+              (change)="lembrarAcesso = $any($event.target).checked"
+            />
+            <span>Lembrar meu acesso</span>
+          </label>
+          <button type="button" class="font-medium text-[#087CF5] transition-colors hover:text-[#0759C9] hover:underline" (click)="onEsqueciSenha()">
+            Esqueci minha senha
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- Instalação do aplicativo (PWA) -->
+<p-dialog
+  header="Instalar Aplicativo"
+  [(visible)]="modalPwaVisivel"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [style]="{ width: '360px' }"
+>
+  @if (modalPwaPlatform === 'ANDROID') {
+    <div class="flex items-center gap-3">
+      <img width="50" src="assets/img/logoMV.png" alt="" />
+      <div>
+        <p>Aplicativo Motors Vivos MC</p>
+        <p class="text-sm text-surface-500">{{ url }}</p>
+      </div>
+    </div>
+  }
+
+  @if (modalPwaPlatform === 'IOS') {
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center gap-3">
+        <img width="50" src="assets/img/Lontano_logo.png" alt="" />
+        <div>
+          <p>Aplicativo Gestão Motorista</p>
+          <p class="text-sm text-surface-500">{{ url }}</p>
+        </div>
+      </div>
+      <p class="text-center text-sm">
+        Para instalar este aplicativo WEB no seu dispositivo, toque no botão "Menu"
+        <img
+          width="15"
+          class="inline"
+          src="https://res.cloudinary.com/rodrigokamada/image/upload/v1641089482/Blog/angular-pwa/safari_action_button_38x50.png"
+          alt=""
+        />
+        e depois o botão "Adicionar à tela inicial" <i class="fa fa-plus-square" aria-hidden="true"></i>
+      </p>
+    </div>
+  }
+
+  <ng-template #footer>
+    @if (modalPwaPlatform === 'IOS') {
+      <p-button label="Fechar" [text]="true" severity="secondary" (onClick)="onFecharModal()" />
+    }
+    @if (modalPwaPlatform === 'ANDROID') {
+      <p-button label="Cancelar" [text]="true" severity="secondary" (onClick)="closePwa()" />
+      <p-button label="Instalar" (onClick)="addToHomeScreen()" />
+    }
+  </ng-template>
+</p-dialog>
+
+<!-- Troca da senha padrão -->
+<p-dialog
+  header="Alterar Senha"
+  [(visible)]="modalAlterarSenhaVisivel"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [style]="{ width: '420px' }"
+  [breakpoints]="{ '575px': '95vw' }"
+>
+  @if (formAlterarSenha) {
+    <form
+      [formGroup]="formAlterarSenha"
+      (ngSubmit)="onAlterarSenha()"
+      (keydown.enter)="$event.preventDefault()"
+      (keydown.shift.enter)="$event.preventDefault()"
+      class="flex flex-col gap-4"
+    >
+      <div class="field">
+        <label class="field-label" for="loginNovaSenha">Nova Senha</label>
+        <input
+          id="loginNovaSenha"
+          pInputText
+          type="password"
+          formControlName="novaSenha"
+          placeholder="Nova Senha"
+          [invalid]="f['novaSenha'].invalid && (f['novaSenha'].dirty || f['novaSenha'].touched)"
+        />
+        @if (f['novaSenha'].invalid && (f['novaSenha'].dirty || f['novaSenha'].touched) && f['novaSenha'].errors?.['required']) {
+          <small class="field-error">Informe a Nova Senha</small>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="loginConfirmaSenha">Confirmar Senha</label>
+        <input
+          id="loginConfirmaSenha"
+          pInputText
+          type="password"
+          formControlName="confirmaSenha"
+          placeholder="Confirmar Senha"
+          [invalid]="f['confirmaSenha'].invalid && (f['confirmaSenha'].dirty || f['confirmaSenha'].touched)"
+        />
+        @if (f['confirmaSenha'].invalid && (f['confirmaSenha'].dirty || f['confirmaSenha'].touched)) {
+          @if (f['confirmaSenha'].errors?.['required']) {
+            <small class="field-error">Informe a Nova Senha</small>
+          }
+          @if (f['confirmaSenha'].errors?.['senhasNaoCoincidem']) {
+            <small class="field-error">As senhas não coincidem.</small>
+          }
+        }
+      </div>
+
+      <div class="flex justify-end">
+        <p-button type="submit" label="Salvar" icon="fas fa-save" />
+      </div>
+    </form>
+  }
+</p-dialog>

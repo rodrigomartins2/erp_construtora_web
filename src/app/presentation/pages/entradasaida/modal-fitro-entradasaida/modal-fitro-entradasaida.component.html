@@ -1,0 +1,65 @@
+<div class="modal-header">
+  <h4 class="modal-title">Filtrar Entrada/Saída do Estoque</h4>
+  <button type="button" class="table-action" aria-label="Fechar" (click)="modalRef.hide()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="form" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div class="field sm:col-span-2">
+      <label class="field-label">Cliente/Fornecedor</label>
+      <app-autocomplete
+        formControlName="pessoaID"
+        [data]="listaCliente"
+        searchKeyword="descricao"
+        placeholder="Digite o nome do cliente ou fornecedor"
+      />
+    </div>
+
+    <div class="field">
+      <label class="field-label">Data Emissão</label>
+      <div class="flex gap-2">
+        <input pInputText type="date" formControlName="dataEmissaoIni" aria-label="Data emissão inicial" />
+        <input pInputText type="date" formControlName="dataEmissaoFim" aria-label="Data emissão final" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Data Movimento</label>
+      <div class="flex gap-2">
+        <input pInputText type="date" formControlName="dataMovimentoIni" aria-label="Data movimento inicial" />
+        <input pInputText type="date" formControlName="dataMovimentoFim" aria-label="Data movimento final" />
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">Operação</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaTipoOperacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="operacao" [value]="item.codigo" [inputId]="'filtro-op-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">Situação</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaSituacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton formControlName="situacao" [value]="item.codigo" [inputId]="'filtro-sit-' + item.codigo" />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer !justify-between">
+  <p-button label="Limpar" icon="fas fa-trash" severity="secondary" [outlined]="true" (onClick)="limparFiltro()" />
+  <p-button label="Filtrar" icon="fas fa-search" (onClick)="aplicarFiltro()" />
+</div>

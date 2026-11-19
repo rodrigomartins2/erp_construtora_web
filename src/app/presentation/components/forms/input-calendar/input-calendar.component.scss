@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host ::ng-deep .p-datepicker {
+  width: 100%;
+}
+
+:host ::ng-deep .p-datepicker-input {
+  width: 100%;
+  min-height: 34px;
+  padding-block: 0.35rem;
+  padding-inline: 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1rem;
+}
+
+:host ::ng-deep .p-datepicker-dropdown {
+  align-self: stretch;
+  width: 2rem;
+}
+
+:host ::ng-deep .input-calendar--error .p-datepicker-input {
+  border-color: var(--p-inputtext-invalid-border-color, #ef4444) !important;
+}
+
+:host ::ng-deep .input-calendar--error .p-datepicker-input:enabled:focus {
+  border-color: var(--p-inputtext-invalid-border-color, #ef4444) !important;
+  box-shadow: 0 0 0 1px var(--p-inputtext-invalid-border-color, #ef4444) !important;
+}

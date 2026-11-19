@@ -1,0 +1,66 @@
+<div class="page-card">
+  <app-breakcrumb>
+    <div segundoBotao class="flex items-center gap-1">
+      <a class="table-action text-lg" pTooltip="Filtrar Dados" tooltipPosition="left" (click)="abrirFiltro()">
+        <i class="fas fa-filter"></i>
+      </a>
+      <a routerLink="categoriacadastro/" class="table-action text-lg" pTooltip="Novo Registro" tooltipPosition="left">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
+  </app-breakcrumb>
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="categoriaID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.categoriaID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="descricaoCategoriaPrincipal">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria Principal</th>
+        <td mat-cell *matCellDef="let row">{{ row.descricaoCategoriaPrincipal }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+        <td mat-cell *matCellDef="let row">{{ row.descricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+        <td mat-cell *matCellDef="let row">{{ row.tipo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <a [routerLink]="['categoriacadastro/editar', row.categoriaID, 2]" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a (click)="onExcluir(row)" class="table-action table-action-danger" [pTooltip]="row.status == 'Ativo' ? 'Inativar' : 'Ativar'" tooltipPosition="top">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>

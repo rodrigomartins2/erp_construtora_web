@@ -1,0 +1,64 @@
+<div
+  class="flex flex-col gap-1"
+  [ngClass]="{
+    'text-red-500': error || internalInvalidDate,
+    'input-calendar--error': error || internalInvalidDate,
+  }"
+>
+  @if (!loading) {
+    @if (label) {
+      <label
+        class="flex min-w-0 items-center gap-0.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider"
+        [for]="inputId || null"
+        [ngClass]="{ 'text-red-500': error || internalInvalidDate }"
+      >
+        <span class="truncate whitespace-nowrap">{{ label }}</span>
+        @if (isRequired || isRRequerired) {
+          <span class="flex-none text-red-500">*</span>
+        }
+      </label>
+    }
+
+    <p-datepicker
+      class="w-full"
+      styleClass="w-full"
+      inputStyleClass="w-full"
+      [ngClass]="{ 'ng-invalid ng-touched ng-dirty': error || internalInvalidDate }"
+      [inputId]="inputId || undefined"
+      [formControl]="innerControl"
+      [placeholder]="placeholder"
+      [dateFormat]="dateFormat"
+      [showIcon]="showIcon"
+      [iconDisplay]="iconDisplay"
+      [showClear]="showClear"
+      [keepInvalid]="true"
+      [showButtonBar]="showButtonBar"
+      [readonlyInput]="readonlyInput"
+      [showOnFocus]="showOnFocus"
+      [motionOptions]="{ disabled: true }"
+      [showTime]="showTime"
+      [timeOnly]="timeOnly"
+      [hourFormat]="hourFormat"
+      [selectionMode]="selectionMode"
+      [numberOfMonths]="numberOfMonths"
+      [firstDayOfWeek]="firstDayOfWeek"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [defaultDate]="defaultDate"
+      [disabledDates]="disabledDates"
+      [disabledDays]="disabledDays"
+      [dataType]="dataType"
+      [appendTo]="appendTo"
+      [autoZIndex]="autoZIndex"
+      [baseZIndex]="baseZIndex"
+      (onBlur)="onBlur()"
+      (onFocus)="onFocus($event)"
+      (onInput)="onInput($event)"
+      (onSelect)="onSelect($event)"
+      (onClear)="onClear()"
+    />
+  } @else {
+    <p-skeleton width="5rem" class="gap-1"></p-skeleton>
+    <p-skeleton height="34px" class="w-full"></p-skeleton>
+  }
+</div>

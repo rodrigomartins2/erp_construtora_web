@@ -1,0 +1,52 @@
+.viewer-container {
+  display: flex;
+  min-height: 0;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.viewer-content {
+  display: flex;
+  height: min(72vh, 720px);
+  min-height: 420px;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.pdf-canvas {
+  display: block;
+  max-width: 100%;
+  background: #ffffff;
+  transition: opacity 0.12s ease;
+}
+
+.page-input {
+  width: 3rem;
+  height: 2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  padding: 0 0.35rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.page-input:focus {
+  border-color: #38bdf8;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18);
+}
+
+@media (max-width: 768px) {
+  .viewer-content {
+    height: 68vh;
+    min-height: 360px;
+  }
+}

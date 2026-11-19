@@ -1,0 +1,13 @@
+<div class="app-paginator-wrapper border-t border-slate-100 bg-slate-50/50 px-4 py-1.5">
+  <p-paginator
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [first]="first"
+    [dropdownAppendTo]="dropdownAppendTo"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [currentPageReportTemplate]="currentPageReportTemplate"
+    (onPageChange)="handlePageChange($event)"
+    styleClass="app-custom-paginator"
+  ></p-paginator>
+</div>

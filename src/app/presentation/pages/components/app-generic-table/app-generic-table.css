@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .app-generic-table .p-datatable-table {
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .app-generic-table .p-datatable-thead > tr > th {
+  background: var(--p-surface-100);
+}
+
+:host ::ng-deep .app-generic-table .p-datatable-tbody > tr > td {
+  border-color: color-mix(in srgb, var(--p-surface-300) 20%, transparent);
+}

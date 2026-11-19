@@ -1,0 +1,177 @@
+<div class="page-card">
+  <app-breakcrumb [titulo]="'Consultar Documentos do Contrato Nro. ' + numeroContraroTitulo">
+    <div segundoBotao class="flex flex-wrap items-center gap-2">
+      <p-button label="Inserir Documento" icon="fas fa-pen-square" size="small" severity="secondary" [outlined]="true" (onClick)="inserirCadastroDocumento()" />
+      <p-button label="Consultar Contrato" icon="fas fa-search" size="small" severity="info" [outlined]="true" routerLink="/app/listcontrato" />
+    </div>
+  </app-breakcrumb>
+
+  <div class="overflow-x-auto rounded-md border border-surface-200">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="documentosContratoID">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let row">{{ row.documentosContratoID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoDocumento">
+        <th mat-header-cell *matHeaderCellDef>Tipo Contrato</th>
+        <td mat-cell *matCellDef="let row">{{ row.tipoDocumento }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="numeroContrato">
+        <th mat-header-cell *matHeaderCellDef>Nro. Contrato</th>
+        <td mat-cell *matCellDef="let row">{{ row.numeroContrato }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataDocumento">
+        <th mat-header-cell *matHeaderCellDef>Dt. Documento</th>
+        <td mat-cell *matCellDef="let row">{{ row.dataDocumento | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataValidade">
+        <th mat-header-cell *matHeaderCellDef>Dt. Validade</th>
+        <td mat-cell *matCellDef="let row">{{ row.dataValidade | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="whitespace-nowrap text-right">
+          <a (click)="onVisualizarArquivo(row.documentosContratoID)" class="table-action" pTooltip="Visualizar documento" tooltipPosition="top">
+            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+          </a>
+          <a (click)="editarCadastroDocumento(row.documentosContratoID)" class="table-action" pTooltip="Alterar" tooltipPosition="top">
+            <i class="fas fa-edit"></i>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="page.totalRows"
+      [pageIndex]="page.currentPage"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageChanged($event)"
+      showFirstLastButtons
+      aria-label="Selecionar página"
+    ></mat-paginator>
+  </div>
+</div>
+
+<ng-template #templateModalDocumentos>
+  <div class="modal-header">
+    <h4 class="modal-title">Documentos</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="onFecharModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-visualizar-pdf [documentoContrato]="documetosContratoID"></app-visualizar-pdf>
+  </div>
+</ng-template>
+
+<ng-template #templateModalForm>
+  <div class="modal-header">
+    <h4 class="modal-title">Inserir Documentos</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalService.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <input type="hidden" formControlName="contratoID" />
+      <div class="form-grid">
+        <div class="field md:col-span-6">
+          <label class="field-label">Tipo Documento</label>
+          <p-select
+            formControlName="tipoDocumentoContratoID"
+            placeholder="Selecione o tipo do documento"
+            [options]="listTipoDocumentoContrato"
+            optionValue="codigo"
+            optionLabel="descricao"
+            [showClear]="true"
+            appendTo="body"
+            [invalid]="f.tipoDocumentoContratoID.invalid && (f.tipoDocumentoContratoID.touched || f.tipoDocumentoContratoID.dirty)"
+          />
+          @if (f.tipoDocumentoContratoID.invalid && (f.tipoDocumentoContratoID.touched || f.tipoDocumentoContratoID.dirty)) {
+            <small class="field-error">Selecione o tipo do documento</small>
+          }
+        </div>
+
+        <div class="field md:col-span-6">
+          <label class="field-label">Situação</label>
+          <p-select
+            formControlName="situacao"
+            placeholder="Selecione a situação"
+            [options]="listaSituacao"
+            optionValue="codigo"
+            optionLabel="descricao"
+            [showClear]="true"
+            appendTo="body"
+            [invalid]="f.situacao.invalid && (f.situacao.touched || f.situacao.dirty)"
+          />
+          @if (f.situacao.invalid && (f.situacao.touched || f.situacao.dirty)) {
+            <small class="field-error">Selecione a situação do documento</small>
+          }
+        </div>
+
+        <div class="field md:col-span-6">
+          <label class="field-label" for="dataDocumento">Dt. Documento</label>
+          <input
+            id="dataDocumento"
+            pInputText
+            type="date"
+            formControlName="dataDocumento"
+            [invalid]="f.dataDocumento.invalid && (f.dataDocumento.touched || f.dataDocumento.dirty)"
+          />
+          @if (f.dataDocumento.invalid && (f.dataDocumento.touched || f.dataDocumento.dirty)) {
+            <small class="field-error">Informe a data do documento</small>
+          }
+        </div>
+
+        <div class="field md:col-span-6">
+          <label class="field-label" for="dataValidade">Dt. Validade</label>
+          <input
+            id="dataValidade"
+            pInputText
+            type="date"
+            formControlName="dataValidade"
+            [invalid]="f.dataValidade.invalid && (f.dataValidade.touched || f.dataValidade.dirty)"
+          />
+          @if (f.dataValidade.invalid && (f.dataValidade.touched || f.dataValidade.dirty)) {
+            <small class="field-error">Informe a data de validade</small>
+          }
+        </div>
+
+        <div class="field md:col-span-12">
+          <label class="field-label" for="arquivo">Selecionar Documentos</label>
+          <input
+            id="arquivo"
+            type="file"
+            multiple
+            accept=".pdf"
+            onclick="value = null"
+            formControlName="arquivo"
+            #arquivo
+            (change)="onFileChanges($event)"
+            class="block w-full cursor-pointer rounded-md border border-surface-300 text-sm text-surface-600 file:mr-3 file:cursor-pointer file:border-0 file:bg-primary-50 file:px-3 file:py-2 file:font-medium file:text-primary-700 hover:file:bg-primary-100"
+            [class.!border-red-500]="f.arquivo.invalid && (f.arquivo.touched || f.arquivo.dirty)"
+          />
+          @if (f.arquivo.invalid && (f.arquivo.touched || f.arquivo.dirty)) {
+            <small class="field-error">Selecione o arquivo</small>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (funcionalidade != 3) {
+      <div class="modal-footer">
+        <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+        <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+      </div>
+    }
+  </form>
+</ng-template>

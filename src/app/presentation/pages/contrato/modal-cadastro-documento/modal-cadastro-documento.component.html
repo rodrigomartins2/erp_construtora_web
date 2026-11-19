@@ -1,0 +1,86 @@
+<div class="modal-header">
+  <h4 class="modal-title">Inserir Documentos</h4>
+  <button type="button" class="table-action" aria-label="Fechar" (click)="modalService.hide()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <div class="form-grid">
+      <div class="field md:col-span-6">
+        <label class="field-label">Tipo Documento</label>
+        <p-select
+          formControlName="tipoDocumentoContratoID"
+          placeholder="Selecione o tipo do documento"
+          [options]="listTipoDocumentoContrato"
+          optionValue="codigo"
+          optionLabel="descricao"
+          [showClear]="true"
+          appendTo="body"
+          [invalid]="f.tipoDocumentoContratoID.invalid && (f.tipoDocumentoContratoID.touched || f.tipoDocumentoContratoID.dirty)"
+        />
+        @if (f.tipoDocumentoContratoID.invalid && (f.tipoDocumentoContratoID.touched || f.tipoDocumentoContratoID.dirty)) {
+          <small class="field-error">Selecione o tipo do documento</small>
+        }
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label" for="docDataDocumento">Dt. Documento</label>
+        <input
+          id="docDataDocumento"
+          pInputText
+          type="date"
+          formControlName="dataDocumento"
+          [invalid]="f.dataDocumento.invalid && (f.dataDocumento.touched || f.dataDocumento.dirty)"
+        />
+        @if (f.dataDocumento.invalid && (f.dataDocumento.touched || f.dataDocumento.dirty)) {
+          <small class="field-error">Informe a data do documento</small>
+        }
+      </div>
+
+      <div class="field md:col-span-3">
+        <label class="field-label" for="docDataValidade">Dt. Validade</label>
+        <input
+          id="docDataValidade"
+          pInputText
+          type="date"
+          formControlName="dataValidade"
+          [invalid]="f.dataValidade.invalid && (f.dataValidade.touched || f.dataValidade.dirty)"
+        />
+        @if (f.dataValidade.invalid && (f.dataValidade.touched || f.dataValidade.dirty)) {
+          <small class="field-error">Informe a data de validade</small>
+        }
+      </div>
+
+      @if (funcionalidade == 1) {
+        <div class="field md:col-span-12">
+          <label class="field-label" for="docArquivo">Selecionar Documentos</label>
+          <input
+            id="docArquivo"
+            type="file"
+            multiple
+            accept=".pdf"
+            onclick="value = null"
+            formControlName="arquivo"
+            (change)="onFileChanges($event)"
+            class="block w-full cursor-pointer rounded-md border border-surface-300 text-sm text-surface-600 file:mr-3 file:cursor-pointer file:border-0 file:bg-primary-50 file:px-3 file:py-2 file:font-medium file:text-primary-700 hover:file:bg-primary-100"
+          />
+          @if (f.arquivo.invalid && (f.arquivo.touched || f.arquivo.dirty)) {
+            <small class="field-error">Selecione o arquivo</small>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

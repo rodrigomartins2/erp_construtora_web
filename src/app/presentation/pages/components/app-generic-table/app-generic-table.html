@@ -1,0 +1,71 @@
+<p-table
+  [value]="data"
+  [paginator]="data.length > rows"
+  [rows]="rows"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [loading]="loading"
+  [tableStyle]="{ 'min-width': minWidth }"
+  sortMode="single"
+  styleClass="app-generic-table"
+>
+  <ng-template #header>
+    <tr>
+      @for (column of columns; track column.field) {
+        @if (isSortable(column)) {
+          <th
+            [pSortableColumn]="column.field"
+            class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant"
+            [ngClass]="getAlignClass(column.align)"
+          >
+            <span class="inline-flex items-center gap-2">
+              {{ column.header }}
+              <p-sortIcon [field]="column.field" />
+            </span>
+          </th>
+        } @else {
+          <th
+            class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant"
+            [ngClass]="getAlignClass(column.align)"
+          >
+            {{ column.header }}
+          </th>
+        }
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-row>
+    <tr class="transition-colors hover:bg-surface-container-low/50">
+      @for (column of columns; track column.field) {
+        <td class="px-6 py-4 text-sm" [ngClass]="getAlignClass(column.align)">
+          @if (column.type === 'badge') {
+            <span
+              class="inline-flex rounded-full px-2 py-1 text-[10px] font-bold uppercase"
+              [ngClass]="getBadgeClass(getValue(row, column.field))"
+            >
+              {{ formatValue(getValue(row, column.field), column) }}
+            </span>
+          } @else {
+            <span
+              [class.font-semibold]="column.type !== 'date'"
+              [class.text-on-surface-variant]="column.type === 'date'"
+            >
+              {{ formatValue(getValue(row, column.field), column) }}
+            </span>
+          }
+        </td>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td
+        class="px-6 py-8 text-center text-sm text-on-surface-variant"
+        [attr.colspan]="columns.length"
+      >
+        {{ emptyMessage }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

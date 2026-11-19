@@ -1,0 +1,143 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <!-- Coluna esquerda -->
+    <div class="form-grid content-start">
+      <div class="field md:col-span-12">
+        <label class="field-label">Cliente/Fornecedor</label>
+        <app-autocomplete
+          formControlName="pessoaID"
+          [data]="listPessoa"
+          searchKeyword="descricao"
+          placeholder="Digite o nome do cliente ou fornecedor"
+          [invalid]="f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)"
+        />
+        @if (f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)) {
+          <small class="field-error">Informe o Cliente/Fornecedor</small>
+        }
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label">Estoque</label>
+        <p-select formControlName="estoqueID" placeholder="Estoque" [options]="listEstoque" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label">Obra</label>
+        <p-select formControlName="obraID" placeholder="Obra" [options]="listObra" optionValue="codigo" optionLabel="descricao" [showClear]="true" [filter]="true" appendTo="body" />
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataAprovacao">Data Aprovação</label>
+        <input id="dataAprovacao" pInputText type="date" formControlName="dataAprovacao" />
+      </div>
+
+      <div class="field md:col-span-8">
+        <label class="field-label" for="usuarioAprovacao">Usuário Aprovação</label>
+        <input id="usuarioAprovacao" pInputText type="text" formControlName="usuarioAprovacao" />
+      </div>
+    </div>
+
+    <!-- Coluna direita -->
+    <div class="form-grid content-start">
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataPedido">Data Pedido</label>
+        <input
+          id="dataPedido"
+          pInputText
+          type="date"
+          formControlName="dataPedido"
+          [invalid]="f.dataPedido.invalid && (f.dataPedido.touched || f.dataPedido.dirty)"
+        />
+        @if (f.dataPedido.invalid && (f.dataPedido.touched || f.dataPedido.dirty)) {
+          <small class="field-error">Informe a data do pedido</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataCotacao">Data Cotação</label>
+        <input id="dataCotacao" pInputText type="date" formControlName="dataCotacao" />
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataEntrega">Data Entrega</label>
+        <input id="dataEntrega" pInputText type="date" formControlName="dataEntrega" />
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label">Valor</label>
+        <p-inputnumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label">Valor Frete</label>
+        <p-inputnumber
+          formControlName="valorFretes"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          inputStyleClass="text-right"
+          (onBlur)="onAtualizaValorTotal(f.valor.value, f.valorFretes.value, f.valorTotal.value)"
+        />
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label">Valor Total</label>
+        <p-inputnumber formControlName="valorTotal" mode="currency" currency="BRL" locale="pt-BR" inputStyleClass="text-right" />
+      </div>
+
+      <div class="field md:col-span-6">
+        <label class="field-label" for="usuarioComprador">Usuário Comprador</label>
+        <input id="usuarioComprador" pInputText type="text" formControlName="usuarioComprador" />
+      </div>
+
+      <div class="field md:col-span-6">
+        <label class="field-label">Forma Pagamento</label>
+        <p-select formControlName="formaPagamentoID" placeholder="Forma Pagamento" [options]="listFormaPagamento" optionValue="codigo" optionLabel="descricao" [showClear]="true" appendTo="body" />
+      </div>
+
+      <div class="field md:col-span-12">
+        <label class="field-label" for="observacao">Observação</label>
+        <textarea id="observacao" pTextarea formControlName="observacao" rows="1"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    }
+    @if (funcionalidade == 3) {
+      <p-button label="Ordem de Compra" icon="fas fa-file-pdf" severity="success" [outlined]="true" (onClick)="abrirModalOrdemCompra()" />
+      <p-button label="Itens da Compra" icon="fas fa-list" severity="success" [outlined]="true" (onClick)="abrirModalItens()" />
+      @if (controleAprovacao) {
+        <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+      }
+      <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+    }
+  </div>
+</form>
+
+<ng-template #templateModalItensEstoque>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ nomeModal }}</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalRef.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-modal-item-pedido [dadosModal]="dadosModal"></app-modal-item-pedido>
+  </div>
+</ng-template>
+
+<ng-template #templateModalOrdemCompra>
+  <div class="modal-header">
+    <h4 class="modal-title">Ordem de Compra, {{ nomeModal }}</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalRef.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-visualizar-pdf [src]="pdfData" [nomeArquivo]="nomeArquivo"></app-visualizar-pdf>
+  </div>
+</ng-template>

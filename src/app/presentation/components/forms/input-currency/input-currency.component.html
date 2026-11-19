@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-1" [ngClass]="{ 'text-red-500': error, 'input-currency--error': error }">
+  @if (!loading) {
+    @if (label) {
+      <label class="flex min-w-0 items-center gap-0.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+        <span class="truncate whitespace-nowrap">{{ label }}</span>
+        @if (isRequired) {
+          <span class="text-red-500">*</span>
+        }
+      </label>
+    }
+    <p-iconField [iconPosition]="iconPosition">
+      @if (type || iconClass) {
+        <p-inputIcon
+          [styleClass]="((type ? getIconClassByType(type) : iconClass) || '') + ' text-[#94A3B8]'"
+          (click)="onClickIcon($event)"
+        />
+      }
+      <p-inputnumber
+        #currencyInputNumber
+        class="w-full"
+        styleClass="w-full"
+        inputStyleClass="w-full text-right"
+        locale="pt-BR"
+        mode="decimal"
+        [minFractionDigits]="casasDecimais"
+        [maxFractionDigits]="casasDecimais"
+        [useGrouping]="!!numberOptions.thousands"
+        [prefix]="numberOptions.prefix || ''"
+        [suffix]="numberOptions.suffix || ''"
+        [min]="minimo"
+        [max]="numberOptions.max ?? undefined"
+        [title]="value !== null ? '' + value : ''"
+        [ariaLabel]="value !== null ? '' + value : ''"
+        [placeholder]="placeholder"
+        [ngModel]="value"
+        (ngModelChange)="onInputChange($event)"
+        (onFocus)="onFocus()"
+        (keyup.enter)="onEnter()"
+        [disabled]="disable"
+        (onBlur)="onBlur()"
+      />
+    </p-iconField>
+    @if (error && errorMessage) {
+      <small class="text-xs text-red-500">{{ errorMessage }}</small>
+    }
+  } @else {
+    <p-skeleton width="5rem" styleClass="mb-2" />
+    <p-skeleton height="40px" class="w-full" styleClass="mb-2" />
+  }
+</div>

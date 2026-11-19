@@ -1,0 +1,64 @@
+/* Estilos base para o componente mobile */
+.card-item {
+  animation: slide-in 0.4s ease-out backwards;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+:host ::ng-deep .custom-mobile-carousel {
+  .p-carousel-content {
+    position: relative;
+  }
+
+  .p-carousel-prev,
+  .p-carousel-next {
+    display: none !important;
+  }
+
+  .p-carousel-indicators {
+    padding: 1rem 0 0.5rem;
+
+    .p-carousel-indicator {
+      button {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: #cbd5e1;
+        transition: all 0.2s;
+      }
+
+      &.p-highlight button {
+        background: var(--p-primary-color, #087CF5);
+        width: 1.25rem;
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .mobile-paginator-compact {
+  border: none;
+  background: transparent;
+  padding: 0;
+
+  .p-paginator-pages .p-paginator-page {
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.8125rem;
+  }
+
+  .p-paginator-prev,
+  .p-paginator-next {
+    min-width: 2.5rem;
+    height: 2.5rem;
+  }
+}

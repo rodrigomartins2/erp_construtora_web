@@ -1,0 +1,70 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="form-grid">
+    <div class="field md:col-span-4">
+      <label class="field-label" for="historico">Histórico</label>
+      <input
+        id="historico"
+        pInputText
+        type="text"
+        formControlName="historico"
+        placeholder="Informe a descrição"
+        [invalid]="f.historico.invalid && (f.historico.touched || f.historico.dirty)"
+      />
+      @if (f.historico.invalid && (f.historico.touched || f.historico.dirty)) {
+        <small class="field-error">Digite a histórico</small>
+      }
+    </div>
+
+    <div class="field md:col-span-4">
+      <span class="field-label">Tipo Movimento</span>
+      <div class="flex h-10 items-center gap-4">
+        @for (item of listaOperacao; track item.codigo) {
+          <label class="flex items-center gap-2 text-sm">
+            <p-radiobutton
+              formControlName="operacao"
+              [value]="item.codigo"
+              [inputId]="'operacao-' + item.codigo"
+              [invalid]="f.operacao.invalid && (f.operacao.touched || f.operacao.dirty)"
+            />
+            {{ item.descricao }}
+          </label>
+        }
+      </div>
+      @if (f.operacao.invalid && (f.operacao.touched || f.operacao.dirty)) {
+        <small class="field-error">Selecione o tipo</small>
+      }
+    </div>
+
+    <div class="field md:col-span-12">
+      <span class="field-label">Situações</span>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <label class="flex items-center gap-2 text-sm">
+          <p-checkbox formControlName="movimentarEstoque" [binary]="true" inputId="movimentarEstoque" />
+          Movimentar Estoque
+        </label>
+        <label class="flex items-center gap-2 text-sm">
+          <p-checkbox formControlName="geraPrevisao" [binary]="true" inputId="geraPrevisao" />
+          Gerar Previsão
+        </label>
+        <label class="flex items-center gap-2 text-sm">
+          <p-checkbox formControlName="geraDespesa" [binary]="true" inputId="geraDespesa" />
+          Gerar Despesas
+        </label>
+        <label class="flex items-center gap-2 text-sm">
+          <p-checkbox formControlName="geraReceita" [binary]="true" inputId="geraReceita" />
+          Gerar Receitas
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>

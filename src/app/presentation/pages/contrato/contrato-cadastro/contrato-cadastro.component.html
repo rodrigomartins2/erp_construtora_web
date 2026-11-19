@@ -1,0 +1,161 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="page-card">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="form-grid content-start">
+      <div class="field md:col-span-12">
+        <label class="field-label">Cliente</label>
+        <app-autocomplete
+          formControlName="pessoaID"
+          [data]="listPessoaContrato"
+          searchKeyword="descricao"
+          placeholder="Digite o nome do cliente ou fornecedor"
+          [invalid]="f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)"
+        />
+        @if (f.pessoaID.invalid && (f.pessoaID.touched || f.pessoaID.dirty)) {
+          <small class="field-error">Informe o Cliente/Fornecedor</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="numeroContrato">Número Contrato</label>
+        <input
+          id="numeroContrato"
+          pInputText
+          type="text"
+          formControlName="numeroContrato"
+          [invalid]="f.numeroContrato.invalid && (f.numeroContrato.touched || f.numeroContrato.dirty)"
+        />
+        @if (f.numeroContrato.invalid && (f.numeroContrato.touched || f.numeroContrato.dirty)) {
+          <small class="field-error">Informe o número do contrato</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataInicioContrato">Dt. Início Contrato</label>
+        <input
+          id="dataInicioContrato"
+          pInputText
+          type="date"
+          formControlName="dataInicioContrato"
+          [invalid]="f.dataInicioContrato.invalid && (f.dataInicioContrato.touched || f.dataInicioContrato.dirty)"
+        />
+        @if (f.dataInicioContrato.invalid && (f.dataInicioContrato.touched || f.dataInicioContrato.dirty)) {
+          <small class="field-error">Informe a data de início do contrato</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label" for="dataFimContrato">Dt. Fim Contrato</label>
+        <input
+          id="dataFimContrato"
+          pInputText
+          type="date"
+          formControlName="dataFimContrato"
+          [invalid]="f.dataFimContrato.invalid && (f.dataFimContrato.touched || f.dataFimContrato.dirty)"
+        />
+        @if (f.dataFimContrato.invalid && (f.dataFimContrato.touched || f.dataFimContrato.dirty)) {
+          <small class="field-error">Informe a data de fim do contrato</small>
+        }
+      </div>
+    </div>
+
+    <div class="form-grid content-start">
+      <div class="field md:col-span-12">
+        <label class="field-label">Responsável pelo contrato</label>
+        <app-autocomplete
+          formControlName="pessoaResponsavelContratoID"
+          [data]="listPessoaResponsavel"
+          searchKeyword="descricao"
+          placeholder="Digite o nome do responsável"
+          [invalid]="f.pessoaResponsavelContratoID.invalid && (f.pessoaResponsavelContratoID.touched || f.pessoaResponsavelContratoID.dirty)"
+        />
+        @if (f.pessoaResponsavelContratoID.invalid && (f.pessoaResponsavelContratoID.touched || f.pessoaResponsavelContratoID.dirty)) {
+          <small class="field-error">Informe o responsável pelo contrato</small>
+        }
+      </div>
+
+      <div class="field md:col-span-8">
+        <label class="field-label">Empresa Responsável pelo contrato</label>
+        <app-autocomplete
+          formControlName="empresaPessoaID"
+          [data]="listEmpresaPessoa"
+          searchKeyword="descricao"
+          placeholder="Digite o nome da empresa Responsável"
+          [invalid]="f.empresaPessoaID.invalid && (f.empresaPessoaID.touched || f.empresaPessoaID.dirty)"
+        />
+        @if (f.empresaPessoaID.invalid && (f.empresaPessoaID.touched || f.empresaPessoaID.dirty)) {
+          <small class="field-error">Informe a empresa responsável</small>
+        }
+      </div>
+
+      <div class="field md:col-span-4">
+        <label class="field-label">Valor Total</label>
+        <p-inputnumber
+          formControlName="valorContrato"
+          mode="decimal"
+          locale="pt-BR"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          inputStyleClass="text-right"
+          [invalid]="f.valorContrato.invalid && (f.valorContrato.touched || f.valorContrato.dirty)"
+        />
+        @if (f.valorContrato.invalid && (f.valorContrato.touched || f.valorContrato.dirty)) {
+          <small class="field-error">Informe o valor do contrato</small>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="descricao">Descrição</label>
+      <textarea id="descricao" pTextarea formControlName="descricao" rows="2"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="observacao">Observações</label>
+      <textarea id="observacao" pTextarea formControlName="observacao" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    @if (funcionalidade == 3) {
+      <p-button label="Finalizar Contrato" icon="fas fa-lock" severity="warn" [outlined]="true" (onClick)="onFinalizar()" />
+    }
+    @if (funcionalidade != 3) {
+      <p-button type="submit" label="Salvar" icon="fas fa-save" severity="success" [outlined]="true" />
+      <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+    } @else {
+      <p-button label="Editar" icon="fas fa-edit" severity="success" [outlined]="true" (onClick)="onEditar()" />
+    }
+    <p-button label="Consultar" icon="fas fa-search" severity="info" [outlined]="true" (onClick)="onConsultar()" />
+  </div>
+</form>
+
+<ng-template #templateModalForm>
+  <div class="modal-header">
+    <h4 class="modal-title">Finalizar Contrato</h4>
+    <button type="button" class="table-action" aria-label="Fechar" (click)="modalService.hide()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-grid">
+      <div class="field md:col-span-6">
+        <label class="field-label" for="dataFinalizacao">Dt. Final</label>
+        <input id="dataFinalizacao" pInputText type="date" #dataFinalizacao />
+      </div>
+      <div class="field md:col-span-12">
+        <label class="field-label" for="observacaoFinalizacao">Observação</label>
+        <textarea id="observacaoFinalizacao" pTextarea #observacaoFinalizacao rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <p-button
+      label="Salvar"
+      icon="fas fa-save"
+      severity="success"
+      [outlined]="true"
+      (onClick)="onSalvarFinalizarContrato(dataFinalizacao.value, observacaoFinalizacao.value)"
+    />
+    <p-button label="Cancelar" icon="fas fa-times-circle" severity="warn" [outlined]="true" (onClick)="onReset()" />
+  </div>
+</ng-template>

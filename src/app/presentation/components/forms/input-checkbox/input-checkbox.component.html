@@ -1,0 +1,29 @@
+<div class="flex items-center gap-2 py-1" [ngClass]="{ 'opacity-70': innerControl.disabled }">
+  @if (!loading) {
+    <p-checkbox
+      [inputId]="inputId"
+      [formControl]="innerControl"
+      [binary]="binary"
+      [ngClass]="{ 'ng-invalid ng-touched': error }"
+      (onChange)="onHandleChange($event)"
+      (onBlur)="onBlur()"
+    ></p-checkbox>
+
+    @if (label) {
+      <label
+        [for]="inputId"
+        class="cursor-pointer text-sm font-medium text-slate-700 transition-colors"
+        [class.text-red-500]="error"
+        [ngClass]="labelClass"
+      >
+        {{ label }}
+        @if (isRequired) {
+          <span class="text-red-500">*</span>
+        }
+      </label>
+    }
+  } @else {
+    <p-skeleton width="1.25rem" height="1.25rem"></p-skeleton>
+    <p-skeleton width="6rem" height="1rem"></p-skeleton>
+  }
+</div>
